@@ -27,8 +27,10 @@ export default class Boot extends Phaser.Scene {
             'player-spritesheet.png',
             { frameWidth: 32, frameHeight: 48 });
         this.load.spritesheet('letter',
-            'bitmapfont.png',
-            { frameWidth: 5, frameHeight: 12 });
+            'bitmapfont32x32.png',
+            { frameWidth:32, frameHeight: 32 });
+            // 'bitmapfont.png',
+            // { frameWidth: 5, frameHeight: 12 });
         //this.load.image('tilesheet', 'sokoban_tilesheet.png');
         //this.load.image('goal', 'time_zone.png');
         //this.load.image('blood', 'blood.png');

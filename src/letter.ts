@@ -39,9 +39,9 @@ export default class Letter extends Phaser.GameObjects.Sprite {
         this.initX = x;
         this.initY = y;
         this.delayBeforeFallMs = delayBeforeFallMs;
-        this.scale = 4;
+
         //Ascii values from 32 to 126.
-        this.setFrame("¿".charCodeAt(0)-32);
+        this.setFrame("é".charCodeAt(0));
 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
