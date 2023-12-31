@@ -1,4 +1,5 @@
-
+import { LetterConfig } from "./configTypes";
+import Sentence from "./sentence";
 /**
  * Clase que representa una letra
  */
@@ -11,21 +12,34 @@ export default class Letter extends Phaser.GameObjects.Sprite {
     private initY: number;
 
     /**
+     * Posición de la letra dentro de la frase
+     */
+    pos: number;
+
+    /**
      * Margen de variabilidad para el shake
      */
     private maxOffset = 2;
     private minOffset = 1;
 
     /**
+     * Tiempo antes de que empieza a vibrar y cae
+     */
+    private delayBeforeShakeMs:number;
+
+    /**
      * Timer para el shake
      */
     private shakeTimer: Phaser.Time.TimerEvent;
-
+    /**
+     * Tiempo que está activo el shake
+     */
+    private shakeMs: number;
 
     /**
-     * Retardo antes de empezar a caer
+     * Controlador al que hay que avisar cuando la letra desaparezca
      */
-    private delayBeforeFallMs: number;
+    private theController: Sentence;
 
 
     /**
@@ -34,33 +48,29 @@ export default class Letter extends Phaser.GameObjects.Sprite {
      * @param {number} x Coordenada X
      * @param {number} y Coordenada Y
      */
-    constructor(scene: Phaser.Scene, x: number, y: number, delayBeforeFallMs: number) {
-        super(scene, x, y, 'letter');
-        this.initX = x;
-        this.initY = y;
-        this.delayBeforeFallMs = delayBeforeFallMs;
+    constructor(scene: Phaser.Scene, controller: Sentence, config:LetterConfig) {
+        super(scene, config.x, config.y, 'letter');
+        this.initX = config.x;
+        this.initY = config.y;
+        this.shakeMs = config.shakeMs;
+        this.pos = config.pos;
+        this.theController = controller;
 
         //Ascii values from 32 to 126.
-        this.setFrame("é".charCodeAt(0));
+        this.setFrame(config.theLetter.charCodeAt(0));
 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         Phaser.Math.RND.signs = [-1,0,1];
-
         
-        this.shakeTimer = this.scene.time.addEvent({
-            delay: 50,
-            callback: this.shakeNow,
-            callbackScope: this,
-            loop: true
-        });
-
-        let fallTimer = this.scene.time.addEvent({
-            delay: this.delayBeforeFallMs,
-            callback: this.fallNow,
+        let activateTimer = this.scene.time.addEvent({
+            delay: config.delayBeforeShakeMs,
+            callback: this.activateShakeAndFall,
             callbackScope: this,
             loop: false
         });
+        
+
     }
 
 
@@ -73,17 +83,33 @@ export default class Letter extends Phaser.GameObjects.Sprite {
     preUpdate(t: number, dt: number) {
         super.preUpdate(t, dt);
 
-        if (this.y >400){
-            this.setActive(false).setVisible(false);
+        if (this.y >600){
+            this.theController.letterHasFinished(this);
+            //this.setActive(false).setVisible(false);
         }
 
 
     }
 
-    shakeNow(){
-        this.setX(this.initX+Phaser.Math.RND.sign() * Phaser.Math.RND.integerInRange(this.minOffset, this.maxOffset));
-        this.setY(this.initX + Phaser.Math.RND.sign() * Phaser.Math.RND.integerInRange(this.minOffset, this.maxOffset));
+    activateShakeAndFall(){
+        this.shakeTimer = this.scene.time.addEvent({
+            delay: 50,
+            callback: this.shakeNow,
+            callbackScope: this,
+            loop: true
+        });
 
+        let fallTimer = this.scene.time.addEvent({
+            delay: this.shakeMs,
+            callback: this.fallNow,
+            callbackScope: this,
+            loop: false
+        });
+    }
+
+    shakeNow(){
+        this.setX(this.initX + Phaser.Math.RND.sign() * Phaser.Math.RND.integerInRange(this.minOffset, this.maxOffset));
+        this.setY(this.initY + Phaser.Math.RND.sign() * Phaser.Math.RND.integerInRange(this.minOffset, this.maxOffset));
     }
 
     fallNow(){

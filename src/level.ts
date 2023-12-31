@@ -1,6 +1,7 @@
 
 import Player from './player';
 import Letter from './letter';
+import Sentence from './sentence';
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -42,7 +43,7 @@ export default class Level extends Phaser.Scene {
         // this.door = new Door(this);
         // this.goal = new Goal(this, this.goalTime, this.door);
         this.player = new Player(this, 0,0);
-        let letter = new Letter(this, 100, 100, 2000);
+        let sentence = new Sentence(this," ¿Quién  tiene  el  kit? ");
         // this.physics.add.collider(this.player, this.groundLayer);
         // this.discGroup = this.add.group();
         // this.discGroup.add(new EdgeDisc(this));
