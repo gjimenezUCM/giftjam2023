@@ -20,7 +20,7 @@ export default class Boot extends Phaser.Scene {
      */
     preload() {
         //this.load.tilemapTiledJSON('tilemap', 'assets/map/level.json');
-        this.load.audio("splat", "assets/sounds/dead.wav");
+        this.load.audio("dead", "assets/sounds/dead.wav");
         // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
         this.load.setPath('assets/sprites/');
         this.load.spritesheet('player',
@@ -77,10 +77,13 @@ export default class Boot extends Phaser.Scene {
             frameRate: this.frameRate, // Velocidad de la animación
             repeat: -1    // Animación en bucle
         });
+
+        // Animación de la explosión de muerte
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('dead', { start: 0, end: 9 }),
+            frames: this.anims.generateFrameNumbers('dead', { start: 0, end: 8 }),
             frameRate: 8, // Velocidad de la animación
+            hideOnComplete: true
         });
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];
