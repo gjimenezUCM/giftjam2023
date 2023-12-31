@@ -1,4 +1,4 @@
-
+import Explosion from "./explosion";
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -6,6 +6,7 @@
 export default class Player extends Phaser.GameObjects.Sprite {
     private speed:number;
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
+    isDead = false;
     /**
      * Constructor del jugador
      * @param {Phaser.Scene} scene Escena a la que pertenece el jugador
@@ -55,6 +56,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
         if (this.body){
             (<Phaser.Physics.Arcade.Body>this.body).setVelocity(vDir.x, vDir.y);
         }
+    }
+
+    onDead() {
+        // Eliminamos las colisiones con el jugador
+        (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = true;
+        new Explosion(this.scene, this.x, this.y);
+        this.setVisible(false);
     }
 
 }

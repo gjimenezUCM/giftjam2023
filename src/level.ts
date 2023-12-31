@@ -14,7 +14,7 @@ import Sentence from './sentence';
 export default class Level extends Phaser.Scene {
 
 
-    private player:Player;
+    player:Player;
     private sentence: Sentence;
     /**
      * Constructor de la escena
@@ -76,29 +76,16 @@ export default class Level extends Phaser.Scene {
         // this.physics.add.overlap(this.player, this.door, (player, door) => door.onOverlap());
         // //this.physics.add.collider(this.discGroup, this.groundLayer);
 
-        // this.splat = this.sound.add("splat");
 
-        // let timer = this.time.addEvent({
-        //     delay: this.spawnTime,
-        //     callback: this.spawnDisc,
-        //     callbackScope: this,
-        //     loop: true
-        // });
     }
 
     update(time:number, dt: number) {
         this.sentence.preUpdate(time,dt);
     }
 
-    // playSplat() {
-    //     this.splat.play();
-    //     this.splat.once("complete", () => {
-    //         this.scene.start('menu');
-    //     });
-    // }
-
-    // spawnDisc() {
-    //     this.discGroup.add(new BouncingDisc(this, Phaser.Math.RND.integerInRange(3 * 64 + 32, 8 * 64 + 32), Phaser.Math.RND.integerInRange(2 * 64 + 32, 7 * 64 + 32), this.discSpeed));
-    // }
+    onPlayerDead() {
+            console.log("Lo maté");            
+            this.player.onDead();
+    }
 
 }

@@ -20,7 +20,7 @@ export default class Boot extends Phaser.Scene {
      */
     preload() {
         //this.load.tilemapTiledJSON('tilemap', 'assets/map/level.json');
-        //this.load.audio("splat", "assets/sound/splat.mp3");
+        this.load.audio("splat", "assets/sounds/dead.wav");
         // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
         this.load.setPath('assets/sprites/');
         this.load.spritesheet('player',
@@ -29,6 +29,9 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('letter',
             'bitmapfont32x32.png',
             { frameWidth:32, frameHeight: 32 });
+        this.load.spritesheet('dead',
+            'dead.png',
+            { frameWidth: 64, frameHeight: 64 });            
             // 'bitmapfont.png',
             // { frameWidth: 5, frameHeight: 12 });
         //this.load.image('tilesheet', 'sokoban_tilesheet.png');
@@ -73,6 +76,11 @@ export default class Boot extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('player', { start: 18, end: 23 }),
             frameRate: this.frameRate, // Velocidad de la animación
             repeat: -1    // Animación en bucle
+        });
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('dead', { start: 0, end: 9 }),
+            frameRate: 8, // Velocidad de la animación
         });
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];

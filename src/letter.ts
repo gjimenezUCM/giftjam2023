@@ -1,5 +1,6 @@
 import { LetterConfig } from "./configTypes";
 import Sentence from "./sentence";
+import Level from "./level";
 /**
  * Objeto  que representa una letra que cae. El comportamiento de la letra
  * es el siguiente:
@@ -72,6 +73,9 @@ export default class Letter extends Phaser.GameObjects.Sprite {
      */
     preUpdate(t: number, dt: number) {
         super.preUpdate(t, dt);
+        if (this.scene.physics.overlap((<Level>this.scene).player, this)) {
+            (<Level>this.scene).onPlayerDead();
+        }
 
         if (this.y >600){
             this.theController.letterHasFinished(this);
