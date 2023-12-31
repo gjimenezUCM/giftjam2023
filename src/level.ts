@@ -15,6 +15,7 @@ export default class Level extends Phaser.Scene {
 
 
     private player:Player;
+    private sentence: Sentence;
     /**
      * Constructor de la escena
      */
@@ -43,7 +44,30 @@ export default class Level extends Phaser.Scene {
         // this.door = new Door(this);
         // this.goal = new Goal(this, this.goalTime, this.door);
         this.player = new Player(this, 0,0);
-        let sentence = new Sentence(this," ¿Quién  tiene  el  kit? ");
+        this.sentence = new Sentence(this, {
+            sentence: " ¿Quién  tiene  el  kit? ",
+            y: 100,
+            /**
+             * Parámetros por defecto
+             */
+            delayBeforeShakeMs: 2000,
+            shakeMs: 1500,
+            fallSpeed: 400,
+            custom: [
+                {
+                    range: "9-13",
+                    delayBeforeShakeMs: 3000,                  
+                },
+                {
+                    range: "16-17",
+                    delayBeforeShakeMs: 4000,
+                },
+                {
+                    range: "20-23",
+                    delayBeforeShakeMs: 5000,
+                },                  
+            ]
+        });
         // this.physics.add.collider(this.player, this.groundLayer);
         // this.discGroup = this.add.group();
         // this.discGroup.add(new EdgeDisc(this));
@@ -60,6 +84,10 @@ export default class Level extends Phaser.Scene {
         //     callbackScope: this,
         //     loop: true
         // });
+    }
+
+    update(time:number, dt: number) {
+        this.sentence.preUpdate(time,dt);
     }
 
     // playSplat() {

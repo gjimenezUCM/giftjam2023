@@ -1,21 +1,7 @@
 import 'phaser';
  import Boot from './boot';
  import Level from './level';
-class PlayGame extends Phaser.Scene {
-    image: Phaser.GameObjects.Image;
-    constructor() {
-        super("PlayGame");
-    }
-    preload(): void {
-        this.load.image('logo', 'assets/phaser3-logo.png');    
-    }
-    create(): void {
-        this.image = this.add.image(400, 300, 'logo');
-    }
-    update(): void {
-        this.image.rotation += 0.01;   
-    }
-}
+
 window.onload = () => {
     let configObject: Phaser.Types.Core.GameConfig = {
         type: Phaser.WEBGL,

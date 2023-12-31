@@ -74,6 +74,8 @@ export default class Boot extends Phaser.Scene {
             frameRate: this.frameRate, // Velocidad de la animación
             repeat: -1    // Animación en bucle
         });
+        // Para facilitar el comportamiento del shake de las letras
+        Phaser.Math.RND.signs = [-1, 0, 1];
         this.scene.start('level');
     }
 }
