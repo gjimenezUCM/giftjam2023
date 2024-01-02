@@ -33,16 +33,26 @@ export default class Level extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
-        // this.map = this.make.tilemap({
-        //     key: 'tilemap',
-        //     tileWidth: 64,
-        //     tileHeight: 64
-        // });
-        // const tileset1 = this.map.addTilesetImage('level_tileset', 'tilesheet');
-        // this.groundLayer = this.map.createLayer('ground', tileset1);
-        // this.groundLayer.setCollisionByProperty({ collision: true });
-        // this.door = new Door(this);
-        // this.goal = new Goal(this, this.goalTime, this.door);
+        let map = this.make.tilemap({
+            key: 'tilemap',
+            tileWidth: 32,
+            tileHeight: 32
+        });
+        const tileset1 = map.addTilesetImage('wall-floor', 'wallfloor-ts');
+        const tileset2 = map.addTilesetImage('screens', 'screens-ts');
+        const tileset3 = map.addTilesetImage('office', 'office-ts');
+        let deskLayer;
+        if (tileset1 && tileset2 && tileset3){
+            map.createLayer('walls', tileset1);
+            map.createLayer('floor', tileset1);
+            deskLayer = map.createLayer('desks', tileset3);
+            let screens = map.createLayer('screens', [tileset2, tileset3]);
+            screens?.setDepth(1000);
+        }
+        let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', { name: 'Desktop' }));
+        desktops.toggleVisible();
+        
+
         this.player = new Player(this, 0,0);
         this.sentence = new Sentence(this, {
             sentence: " ¿Quién  tiene  el  kit? ",
@@ -68,15 +78,14 @@ export default class Level extends Phaser.Scene {
                 },                  
             ]
         });
-        // this.physics.add.collider(this.player, this.groundLayer);
+        this.physics.add.collider(this.player, desktops);
+
         // this.discGroup = this.add.group();
         // this.discGroup.add(new EdgeDisc(this));
         // //this.discGroup.add(new BouncingDisc(this, 400, 300));
         // this.physics.add.overlap(this.player, this.discGroup, (player, disc) => disc.onCollision(player));
         // this.physics.add.overlap(this.player, this.door, (player, door) => door.onOverlap());
         // //this.physics.add.collider(this.discGroup, this.groundLayer);
-
-
     }
 
     update(time:number, dt: number) {

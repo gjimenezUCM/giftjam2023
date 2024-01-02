@@ -17,6 +17,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
         super(scene, 9 * 64 - 32, 8 * 64 - 32, 'player');
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
+        this.setScale(1.0, 2/3);
+        let halfHeight = (<Phaser.Physics.Arcade.Body>this.body).halfHeight;
+        let halfWidth = (<Phaser.Physics.Arcade.Body>this.body).halfWidth;
+        (<Phaser.Physics.Arcade.Body>this.body).setCircle(halfWidth, 0, halfHeight - halfWidth);
         this.speed = 200;
         if (this.scene.input.keyboard!==null){
             this.cursors = this.scene.input.keyboard.createCursorKeys();

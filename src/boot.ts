@@ -19,7 +19,7 @@ export default class Boot extends Phaser.Scene {
      * Carga de los assets del juego
      */
     preload() {
-        //this.load.tilemapTiledJSON('tilemap', 'assets/map/level.json');
+        this.load.tilemapTiledJSON('tilemap', 'assets/maps/lab.json');
         this.load.audio("dead", "assets/sounds/dead.wav");
         // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
         this.load.setPath('assets/sprites/');
@@ -34,7 +34,9 @@ export default class Boot extends Phaser.Scene {
             { frameWidth: 64, frameHeight: 64 });            
             // 'bitmapfont.png',
             // { frameWidth: 5, frameHeight: 12 });
-        //this.load.image('tilesheet', 'sokoban_tilesheet.png');
+        this.load.image('wallfloor-ts', 'room/wall-floor.png');
+        this.load.image('screens-ts', 'room/screens.png');
+        this.load.image('office-ts', 'room/office.png');
         //this.load.image('goal', 'time_zone.png');
         //this.load.image('blood', 'blood.png');
         // this.load.spritesheet('sawblade2',

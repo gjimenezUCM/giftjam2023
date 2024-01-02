@@ -98,10 +98,11 @@ module.exports = {
     // extensión, probará a buscar los ficheros con las
     // extensiones siguientes. Por defecto son '.js' y '.json'
     // pero tenemos que añadir .ts[x] para TypeScript.
-    // .json no lo añado. .tsx en realidad no hace falta... es
-    // la extensión usada por convenio para plantillas de React.
+    // .json no lo añado.
+    // Eliminamos los .tsx ya que entran en conflicto con los tileset
+    // de Tiled
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.ts', '.js']
     },
 
     // Prueba de cargas de recursos
