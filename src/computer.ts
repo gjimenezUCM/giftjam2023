@@ -26,6 +26,8 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     private manager:Assignment;
 
     
+
+    
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'computer');
         this.play('computer-idle');
@@ -37,6 +39,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
             this.activationKey = this.scene.input.keyboard.addKey('Z');
         }
         this.setVisible(false);
+
     }
 
     setAssignmentManager(aManager: Assignment) {
@@ -101,6 +104,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
             // 2. Si pulsa la tecla de activación entonces gestionamos el número de click
             // y la barra que muestra las pulsaciones que nos quedan
             if (Phaser.Input.Keyboard.JustDown(this.activationKey)) {
+                (<Level>this.scene).clickSound()
                 this.currentClicks++;
                 let frame = Math.floor((this.currentClicks * Computer.contentFrames) / this.totalClicks);
                 frame = Math.min(Computer.contentFrames - 1, frame);

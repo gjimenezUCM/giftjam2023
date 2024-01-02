@@ -21,6 +21,11 @@ export default class Boot extends Phaser.Scene {
     preload() {
         this.load.tilemapTiledJSON('tilemap', 'assets/maps/lab.json');
         this.load.audio("dead", "assets/sounds/dead.wav");
+        this.load.audio("interactionCompleted", "assets/sounds/interactionCompleted.wav");
+        this.load.audio("assignmentCompleted", "assets/sounds/assignmentCompleted.wav");
+        for (let i=1; i<=11; i++) {
+            this.load.audio(`blip${i}`, `assets/sounds/bleeps/Blip${i}.wav`);            
+        }
         // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
         this.load.setPath('assets/sprites/');
         this.load.spritesheet('player',

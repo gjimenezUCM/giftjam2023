@@ -21,6 +21,9 @@ export default class Assignment {
     private theTimer = 0;
     private numInteractions = 0;
 
+    private static interactionCompleted: Phaser.Sound.HTML5AudioSound;
+    private static assignmentCompleted: Phaser.Sound.HTML5AudioSound;
+
 
     constructor(scene: Phaser.Scene, computerSet: Array<Computer>, config: AssignmentConfig) {
         this.scene = scene;
@@ -31,6 +34,8 @@ export default class Assignment {
             (<Computer>computer).doShutdown();
         }
         this.currentActiveComputers = 0;
+        Assignment.interactionCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("interactionCompleted");
+        Assignment.assignmentCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("assignmentCompleted")
     }
 
 
@@ -58,14 +63,24 @@ export default class Assignment {
         this.currentActiveComputers++;
     }
 
+    /**
+     * Para que los computadores avisen de que se han apagado
+     */
     onComputerShutdown() {
         this.currentActiveComputers--;
     }
 
+    /**
+     * Para que los computadores avisen de que se ha hecho una interacción
+     * completa con ellos
+     */
     onInteractionCompleted() {
         this.cfg.numIteractions--;
         if (this.cfg.numIteractions == 0 ) {
+            Assignment.assignmentCompleted.play();
             console.log("Assignment completed");
+        } else {
+            Assignment.interactionCompleted.play();
         }
     }
 

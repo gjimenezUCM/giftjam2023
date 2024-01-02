@@ -18,6 +18,8 @@ export default class Level extends Phaser.Scene {
     player:Player;
     private sentence: Sentence;
     private assignment: Assignment;
+
+    private clickSounds: Array<Phaser.Sound.HTML5AudioSound>;
     /**
      * Constructor de la escena
      */
@@ -99,6 +101,11 @@ export default class Level extends Phaser.Scene {
                 timePerDayMs: 2000,
                 maxActiveComputers: 3
             });
+
+        this.clickSounds = [];
+        for (let i = 1; i <= 11; i++) {
+            this.clickSounds[i - 1] = <Phaser.Sound.HTML5AudioSound>this.sound.add(`blip${i}`);
+        }
     }
 
     update(time:number, dt: number) {
@@ -109,6 +116,10 @@ export default class Level extends Phaser.Scene {
     onPlayerDead() {
             console.log("Lo maté");            
             this.player.onDead();
+    }
+
+    clickSound() {
+        Phaser.Math.RND.pick(this.clickSounds).play();
     }
 
 }
