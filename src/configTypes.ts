@@ -80,3 +80,26 @@ export interface CustomLetterConfig {
     shakeMs?: number,
     fallSpeed?: number
 }
+
+export interface AssignmentConfig {
+    /**
+     * Número de veces que hay que interactuar con los computadores
+     * para completar la práctica
+     */
+    numIteractions: number;
+
+    /**
+     * Número máximo de días antes de completar la práctica
+     */
+    numDays: number;
+
+    /**
+     * Tiempo en ms que cuenta representa un día
+     */
+    timePerDayMs: number;
+
+    /**
+     * Número máximo de computadores activos simultáneamente
+     */
+    maxActiveComputers: number;
+}

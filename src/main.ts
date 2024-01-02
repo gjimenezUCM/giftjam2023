@@ -22,6 +22,7 @@ window.onload = () => {
                 debug: true
             }
         },
+        seed: ["gramola"]
     };
     
     new Phaser.Game(configObject);

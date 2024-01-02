@@ -1,8 +1,8 @@
 
 import Player from './player';
-import Letter from './letter';
 import Sentence from './sentence';
 import Computer from './computer';
+import Assignment from "./assignment";
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -17,7 +17,7 @@ export default class Level extends Phaser.Scene {
 
     player:Player;
     private sentence: Sentence;
-    private computers: Phaser.GameObjects.Group;
+    private assignment: Assignment;
     /**
      * Constructor de la escena
      */
@@ -53,14 +53,9 @@ export default class Level extends Phaser.Scene {
         }
         let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', { name: 'Desktop' }));
         desktops.toggleVisible();
-        this.computers = this.physics.add.group(map.createFromObjects('computers', { name: 'Computer', classType: Computer}));
-        for (let computer of this.computers.getChildren()) {
-            (<Computer>computer).shutdown();
-        }
-        (<Computer>this.computers.getChildren()[14]).wakeUp();
+
 
         this.player = new Player(this, 0,0);
-        new Computer(this, 0,0);
         this.sentence = new Sentence(this, {
             sentence: " ¿Quién  tiene  el  kit? ",
             y: 100,
@@ -93,10 +88,22 @@ export default class Level extends Phaser.Scene {
         // this.physics.add.overlap(this.player, this.discGroup, (player, disc) => disc.onCollision(player));
         // this.physics.add.overlap(this.player, this.door, (player, door) => door.onOverlap());
         // //this.physics.add.collider(this.discGroup, this.groundLayer);
+
+        let computerSet = map.createFromObjects('computers', { name: 'Computer', classType: Computer });
+        this.assignment = new Assignment(
+            this,
+            <Array<Computer>>computerSet,
+            {
+                numIteractions: 5,
+                numDays: 15,
+                timePerDayMs: 2000,
+                maxActiveComputers: 3
+            });
     }
 
     update(time:number, dt: number) {
         this.sentence.preUpdate(time,dt);
+        this.assignment.preUpdate(time, dt);
     }
 
     onPlayerDead() {

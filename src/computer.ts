@@ -1,3 +1,4 @@
+import Assignment from "./assignment";
 import Level from "./level";
 export default class Computer extends Phaser.GameObjects.Sprite {
 
@@ -22,6 +23,8 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     private waitingTimer: number;
     private noPlayerTimer: number;
 
+    private manager:Assignment;
+
     
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'computer');
@@ -35,13 +38,17 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         }
         this.setVisible(false);
     }
+
+    setAssignmentManager(aManager: Assignment) {
+        this.manager = aManager;
+    }
+
     /**
      * Activación del computador
      * @param numberOfClicks Número de clicks necesarios para completar la tarea del computador
      * @param maxTimeWaiting Máximo tiempo que el computador estará activo antes de que el jugador llegue a él
      */
-    wakeUp(numberOfClicks: number = 6, maxTimeWaiting: number = 5000){
-        this.setVisible(true);
+    doWakeUp(numberOfClicks: number = 6, maxTimeWaiting: number = 5000){
         this.setActive(true);
         this.loadingBarFrame.setPosition(this.x + this.width /2 + Computer.offset, this.y); 
         this.loadingBarContent.setPosition(this.x + this.width / 2 + Computer.offset, this.y);
@@ -54,17 +61,19 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         this.computerState = "WAITING";
 
         this.waitingTimer = maxTimeWaiting;
+        this.setVisible(true);
     }
 
     /**
      * Desactivación del computador
      */
-    shutdown(){
+    doShutdown(){
         this.loadingBarFrame.setVisible(false);
         this.loadingBarContent.setVisible(false);
         this.computerState = "SLEEP";
         this.setActive(false);
         this.setVisible(false);
+        this.manager.onComputerShutdown();
     }
     /**
      * Métodos preUpdate de Phaser. 
@@ -79,8 +88,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
             this.waitingTimer -= dt;
             // Si se ha agotado el tiempo de espera, lo desactivamos (SLEEP)
             if (this.waitingTimer<=0){
-                console.log("desactivar por waiting");
-                this.shutdown();
+                this.doShutdown();
             }
         }
 
@@ -97,6 +105,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
                 let frame = Math.floor((this.currentClicks * Computer.contentFrames) / this.totalClicks);
                 frame = Math.min(Computer.contentFrames - 1, frame);
                 this.loadingBarContent.setFrame(Computer.contentFrames-frame-1);
+                this.checkClicks();
             }
         } else {
             // El jugador no está en el radio de acción del computador
@@ -113,10 +122,16 @@ export default class Computer extends Phaser.GameObjects.Sprite {
             if (this.computerState === "PLAYER_LEFT") {
                 this.noPlayerTimer -= dt;
                 if (this.noPlayerTimer <= 0) {
-                    this.shutdown();
+                    this.doShutdown();
                 }
-
             }       
+        }
+    }
+
+    checkClicks() {
+        if (this.currentClicks == this.totalClicks) {
+            this.manager.onInteractionCompleted();
+            this.doShutdown();
         }
     }
 }

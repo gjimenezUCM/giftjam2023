@@ -63,7 +63,6 @@ export default class Sentence extends Phaser.GameObjects.Group {
 
     letterHasFinished(aLetter:Letter) {
         this.numAliveLetters--;
-        console.log("Ha terminado", aLetter.cfg.pos,this.numAliveLetters);
         this.killAndHide(aLetter);
     }
 
