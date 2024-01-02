@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="19" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="14">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="19" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="31">
  <editorsettings>
   <export target="lab.json" format="json"/>
  </editorsettings>
@@ -107,5 +107,23 @@
   <object id="11" name="Desktop" type="Desktop" x="484.711" y="305.43" width="244.984" height="46.163"/>
   <object id="12" name="Desktop" type="Desktop" x="484.711" y="402.327" width="244.984" height="46.163"/>
   <object id="13" name="Desktop" type="Desktop" x="484.254" y="497.395" width="244.984" height="46.163"/>
+ </objectgroup>
+ <objectgroup id="8" name="computers">
+  <object id="14" name="Computer" type="Computer" x="96" y="256" width="32" height="32"/>
+  <object id="15" name="Computer" type="Computer" x="256" y="256" width="32" height="32"/>
+  <object id="17" name="Computer" type="Computer" x="96" y="352" width="32" height="32"/>
+  <object id="18" name="Computer" type="Computer" x="256" y="352" width="32" height="32"/>
+  <object id="19" name="Computer" type="Computer" x="96" y="448" width="32" height="32"/>
+  <object id="20" name="Computer" type="Computer" x="256" y="448" width="32" height="32"/>
+  <object id="21" name="Computer" type="Computer" x="96" y="544" width="32" height="32"/>
+  <object id="22" name="Computer" type="Computer" x="256" y="544" width="32" height="32"/>
+  <object id="23" name="Computer" type="Computer" x="512" y="256" width="32" height="32"/>
+  <object id="24" name="Computer" type="Computer" x="672" y="256" width="32" height="32"/>
+  <object id="25" name="Computer" type="Computer" x="512" y="352" width="32" height="32"/>
+  <object id="26" name="Computer" type="Computer" x="672" y="352" width="32" height="32"/>
+  <object id="27" name="Computer" type="Computer" x="512" y="448" width="32" height="32"/>
+  <object id="28" name="Computer" type="Computer" x="672" y="448" width="32" height="32"/>
+  <object id="29" name="Computer" type="Computer" x="512" y="544" width="32" height="32"/>
+  <object id="30" name="Computer" type="Computer" x="672" y="544" width="32" height="32"/>
  </objectgroup>
 </map>

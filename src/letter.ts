@@ -48,6 +48,8 @@ export default class Letter extends Phaser.GameObjects.Sprite {
         this.scene.physics.add.existing(this);
         this.setVisible(false);
         this.setActive(false);
+        this.setTint(0x000000);
+        this.setDepth(2000);
     }
 
     onEnable() {

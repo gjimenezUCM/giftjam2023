@@ -2,6 +2,7 @@
 import Player from './player';
 import Letter from './letter';
 import Sentence from './sentence';
+import Computer from './computer';
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -16,6 +17,7 @@ export default class Level extends Phaser.Scene {
 
     player:Player;
     private sentence: Sentence;
+    private computers: Phaser.GameObjects.Group;
     /**
      * Constructor de la escena
      */
@@ -51,9 +53,14 @@ export default class Level extends Phaser.Scene {
         }
         let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', { name: 'Desktop' }));
         desktops.toggleVisible();
-        
+        this.computers = this.physics.add.group(map.createFromObjects('computers', { name: 'Computer', classType: Computer}));
+        for (let computer of this.computers.getChildren()) {
+            (<Computer>computer).shutdown();
+        }
+        (<Computer>this.computers.getChildren()[14]).wakeUp();
 
         this.player = new Player(this, 0,0);
+        new Computer(this, 0,0);
         this.sentence = new Sentence(this, {
             sentence: " ¿Quién  tiene  el  kit? ",
             y: 100,

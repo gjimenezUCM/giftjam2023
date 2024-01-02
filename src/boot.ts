@@ -32,8 +32,15 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('dead',
             'dead.png',
             { frameWidth: 64, frameHeight: 64 });            
-            // 'bitmapfont.png',
-            // { frameWidth: 5, frameHeight: 12 });
+        this.load.spritesheet('computer',
+            'computer.png',
+            { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('loadingBarFrame',
+            'loadingBar.png',
+            { frameWidth: 16, frameHeight: 32, startFrame:0, endFrame:0 });
+        this.load.spritesheet('loadingBarContent',
+            'loadingBar.png',
+            { frameWidth: 16, frameHeight: 32, startFrame: 3, endFrame: 9 });
         this.load.image('wallfloor-ts', 'room/wall-floor.png');
         this.load.image('screens-ts', 'room/screens.png');
         this.load.image('office-ts', 'room/office.png');
@@ -87,6 +94,24 @@ export default class Boot extends Phaser.Scene {
             frameRate: 8, // Velocidad de la animación
             hideOnComplete: true
         });
+
+        // Animación de computador activo
+        this.anims.create({
+            key: 'computer-idle',
+            frames: this.anims.generateFrameNumbers('computer', { start: 0, end: 3 }),
+            frameRate: 12, // Velocidad de la animación
+            repeat: -1,
+            yoyo: true
+        });
+        // Animación de barra de carga del computador
+        // this.anims.create({
+        //     key: 'loadingBar-frame',
+        //     frames: this.anims.generateFrameNumbers('loadingBar', { start: 0, end: 0 })
+        // });
+        // this.anims.create({
+        //     key: 'loadingBar-content',
+        //     frames: this.anims.generateFrameNumbers('loadingBar', { frames: [8,7,6,5,4,3] })
+        // });
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];
         this.scene.start('level');
