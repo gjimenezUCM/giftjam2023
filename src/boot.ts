@@ -135,13 +135,13 @@ export default class Boot extends Phaser.Scene {
         // Animación de la tecla de interación
         this.anims.create({
             key: 'interactionKey-idle',
-            frames: this.anims.generateFrameNumbers('interactionKey', { start: 0, end: 2 }),
+            frames: this.anims.generateFrameNumbers('interactionKey', { start: 0, end: 1 }),
             frameRate: 6,
             repeat: -1
         });
         this.anims.create({
             key: 'startKey-idle',
-            frames: this.anims.generateFrameNumbers('startKey', { start: 0, end: 2 }),
+            frames: this.anims.generateFrameNumbers('startKey', { start: 0, end: 1 }),
             frameRate: 6,
             repeat: -1
         });
