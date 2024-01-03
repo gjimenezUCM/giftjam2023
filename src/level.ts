@@ -19,7 +19,9 @@ export default class Level extends Phaser.Scene {
     private sentence: Sentence;
     private assignment: Assignment;
 
-    private clickSounds: Array<Phaser.Sound.HTML5AudioSound>;
+    private clickSound: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
+
+    private activationKey: Phaser.Input.Keyboard.Key;
     /**
      * Constructor de la escena
      */
@@ -60,7 +62,7 @@ export default class Level extends Phaser.Scene {
         this.player = new Player(this);
         this.sentence = new Sentence(this, {
             sentence: " ¿Quién  tiene  el  kit? ",
-            y: 32*4 - 32/2,
+            y: 32*4 - 32/2 -1,
             /**
              * Parámetros por defecto
              */
@@ -84,6 +86,10 @@ export default class Level extends Phaser.Scene {
         });
         this.physics.add.collider(this.player, desktops);
 
+        if (this.input.keyboard !== null) {
+            this.activationKey = this.input.keyboard.addKey('M');
+        }
+
         // this.discGroup = this.add.group();
         // this.discGroup.add(new EdgeDisc(this));
         // //this.discGroup.add(new BouncingDisc(this, 400, 300));
@@ -104,10 +110,7 @@ export default class Level extends Phaser.Scene {
                 maxActiveComputers: 3
             });
 
-        this.clickSounds = [];
-        for (let i = 1; i <= 11; i++) {
-            this.clickSounds[i - 1] = <Phaser.Sound.HTML5AudioSound>this.sound.add(`blip${i}`);
-        }
+        this.clickSound = this.sound.add('blip');
     }
 
     update(time:number, dt: number) {
@@ -120,8 +123,9 @@ export default class Level extends Phaser.Scene {
             this.player.onDead();
     }
 
-    clickSound() {
-        Phaser.Math.RND.pick(this.clickSounds).play();
+    performClick() {
+        this.clickSound.detune = Phaser.Math.RND.integerInRange(-300, 300);
+        this.clickSound.play();
     }
 
 }

@@ -1,5 +1,8 @@
 import Computer from './computer';
 import { AssignmentConfig } from './configTypes';
+import Level from './level';
+
+type resultType = "PASS" | "FAIL";
 export default class Assignment {
 
     private cfg: AssignmentConfig;
@@ -22,9 +25,11 @@ export default class Assignment {
     private theTimer = 0;
     private numInteractions = 0;
     private completed = false;
+    
+    private result: resultType;
 
-    private static interactionCompleted: Phaser.Sound.HTML5AudioSound;
-    private static assignmentCompleted: Phaser.Sound.HTML5AudioSound;
+    private static interactionCompleted: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
+    private static assignmentCompleted: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
 
     private assignBar: Array<Phaser.GameObjects.Sprite>;
     private text: Phaser.GameObjects.Text;
@@ -39,8 +44,8 @@ export default class Assignment {
             (<Computer>computer).doShutdown();
         }
         this.currentActiveComputers = 0;
-        Assignment.interactionCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("interactionCompleted");
-        Assignment.assignmentCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("assignmentCompleted");
+        Assignment.interactionCompleted = this.scene.sound.add("interactionCompleted");
+        Assignment.assignmentCompleted = this.scene.sound.add("assignmentCompleted");
         this.createUI(x,y);
     }
 
@@ -98,12 +103,18 @@ export default class Assignment {
     preUpdate(t: number, dt: number) {
         if (!this.completed){
             this.theTimer+=dt;
+            // Añadimos un día más al conteo
             if (this.theTimer > this.cfg.timePerDayMs * (this.currentDays+1)) {
                 this.currentDays++;
                 this.currentDays = this.currentDays > this.cfg.numDays ? this.cfg.numDays : this.currentDays;
                 this.text.setText(`Entrega en ${this.cfg.numDays - this.currentDays} días`);
+                // Comprobamos si hemos llegado al deadline
                 if (this.currentDays==this.cfg.numDays) {
                     this.text.setText("Práctica no entregada");
+                    (<Level>this.scene).onPlayerDead(); 
+                    this.completed = true;
+                    this.completeAndShutdown("FAIL");
+    
                 } else {
                     this.activateComputer();
                 }
@@ -112,14 +123,16 @@ export default class Assignment {
     }
 
     activateComputer() {
-        if (this.currentActiveComputers == this.cfg.maxActiveComputers)
-            return;
-        let aComputer = null;
-        do {
-            aComputer = Phaser.Math.RND.pick(this.computers.getChildren());
-        } while(aComputer.active)
-        (<Computer>aComputer).doWakeUp(6, 10000);
-        this.currentActiveComputers++;
+        if (!this.completed) {
+            if (this.currentActiveComputers == this.cfg.maxActiveComputers)
+                return;
+            let aComputer = null;
+            do {
+                aComputer = Phaser.Math.RND.pick(this.computers.getChildren());
+            } while(aComputer.active)
+            (<Computer>aComputer).doWakeUp(6, 10000);
+            this.currentActiveComputers++;
+        }
     }
 
     /**
@@ -134,15 +147,27 @@ export default class Assignment {
      * completa con ellos
      */
     onInteractionCompleted() {
-        this.currentInteractions++;
-        this.assignBar[this.currentInteractions-1].setFrame(1);
-        if (this.currentInteractions === this.cfg.numIteractions) {
-            Assignment.assignmentCompleted.play();
-            this.text.setText("¡Práctica completada!");
-            this.completed = true;
-        } else {
-            Assignment.interactionCompleted.play();
+        if (!this.completed) {
+            this.currentInteractions++;
+            this.assignBar[this.currentInteractions-1].setFrame(1);
+            // Se han completado todas las interacciones por lo que
+            // se ha terminado la práctica a tiempo
+            if (this.currentInteractions === this.cfg.numIteractions) {
+                Assignment.assignmentCompleted.play();
+                this.text.setText("¡Práctica completada!");
+                this.completeAndShutdown("PASS");
+            } else {
+                Assignment.interactionCompleted.play();
+            }
         }
+    }
+
+    completeAndShutdown(result: resultType) {
+        for (let computer of this.computers.getChildren()) {
+            (<Computer>computer).doShutdown();
+        }
+        this.result = result;
+        this.completed = true;
     }
 
 

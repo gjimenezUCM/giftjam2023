@@ -54,6 +54,9 @@ export default class Computer extends Phaser.GameObjects.Sprite {
      * @param maxTimeWaiting Máximo tiempo que el computador estará activo antes de que el jugador llegue a él
      */
     doWakeUp(numberOfClicks: number = 6, maxTimeWaiting: number = 5000){
+        if (this.body) {
+            (<Phaser.Physics.Arcade.Body>this.body).setSize(10, 10)
+        }
         this.play('computer-idle');
         this.loadingBarFrame.setPosition(this.x + this.width /2 + Computer.offset, this.y); 
         this.loadingBarContent.setPosition(this.x + this.width / 2 + Computer.offset, this.y);
@@ -112,7 +115,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
             // 2. Si pulsa la tecla de activación entonces gestionamos el número de click
             // y la barra que muestra las pulsaciones que nos quedan
             if (Phaser.Input.Keyboard.JustDown(this.activationKey)) {
-                (<Level>this.scene).clickSound()
+                (<Level>this.scene).performClick()
                 this.currentClicks++;
                 let frame = Math.floor((this.currentClicks * Computer.contentFrames) / this.totalClicks);
                 frame = Math.min(Computer.contentFrames - 1, frame);

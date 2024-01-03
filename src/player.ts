@@ -70,6 +70,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = true;
         new Explosion(this.scene, this.x, this.y);
         this.setVisible(false);
+        this.setActive(false);
     }
 
 }
