@@ -49,7 +49,13 @@ export default class Boot extends Phaser.Scene {
         this.load.image('wallfloor-ts', 'room/wall-floor.png');
         this.load.image('screens-ts', 'room/screens.png');
         this.load.image('office-ts', 'room/office.png');
-        //this.load.image('goal', 'time_zone.png');
+        this.load.spritesheet('assignBarSide',
+            'assignBarSide.png',
+            { frameWidth: 6, frameHeight: 8 });
+        this.load.spritesheet('assignBarCenter',
+            'assignBarCenter.png',
+            { frameWidth: 5, frameHeight: 8 });
+            //this.load.image('goal', 'time_zone.png');
         //this.load.image('blood', 'blood.png');
         // this.load.spritesheet('sawblade2',
         //     'sawblade2.png',

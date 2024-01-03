@@ -30,7 +30,6 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'computer');
-        this.play('computer-idle');
         this.loadingBarFrame = new Phaser.GameObjects.Sprite(this.scene,this.x, this.y, 'loadingBarFrame')
         this.loadingBarContent = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, 'loadingBarContent')
         this.scene.add.existing(this.loadingBarFrame);
@@ -39,7 +38,6 @@ export default class Computer extends Phaser.GameObjects.Sprite {
             this.activationKey = this.scene.input.keyboard.addKey('Z');
         }
         this.setVisible(false);
-
     }
 
     setAssignmentManager(aManager: Assignment) {
@@ -52,7 +50,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
      * @param maxTimeWaiting Máximo tiempo que el computador estará activo antes de que el jugador llegue a él
      */
     doWakeUp(numberOfClicks: number = 6, maxTimeWaiting: number = 5000){
-        this.setActive(true);
+        this.play('computer-idle');
         this.loadingBarFrame.setPosition(this.x + this.width /2 + Computer.offset, this.y); 
         this.loadingBarContent.setPosition(this.x + this.width / 2 + Computer.offset, this.y);
         this.loadingBarContent.setFrame(Computer.contentFrames-1);
@@ -64,6 +62,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         this.computerState = "WAITING";
 
         this.waitingTimer = maxTimeWaiting;
+        this.setActive(true);
         this.setVisible(true);
     }
 

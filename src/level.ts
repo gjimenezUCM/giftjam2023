@@ -94,6 +94,8 @@ export default class Level extends Phaser.Scene {
         let computerSet = map.createFromObjects('computers', { name: 'Computer', classType: Computer });
         this.assignment = new Assignment(
             this,
+            400,
+            50,
             <Array<Computer>>computerSet,
             {
                 numIteractions: 5,

@@ -18,14 +18,17 @@ export default class Assignment {
 
     private currentActiveComputers = 0;
     private currentDays = 0;
+    private currentInteractions = 0;
     private theTimer = 0;
     private numInteractions = 0;
 
     private static interactionCompleted: Phaser.Sound.HTML5AudioSound;
     private static assignmentCompleted: Phaser.Sound.HTML5AudioSound;
 
+    private assignBar: Array<Phaser.GameObjects.Sprite>;
 
-    constructor(scene: Phaser.Scene, computerSet: Array<Computer>, config: AssignmentConfig) {
+
+    constructor(scene: Phaser.Scene, x:number, y:number, computerSet: Array<Computer>, config: AssignmentConfig) {
         this.scene = scene;
         this.cfg = config;
         this.computers = this.scene.physics.add.group(computerSet);
@@ -35,7 +38,39 @@ export default class Assignment {
         }
         this.currentActiveComputers = 0;
         Assignment.interactionCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("interactionCompleted");
-        Assignment.assignmentCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("assignmentCompleted")
+        Assignment.assignmentCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("assignmentCompleted");
+        this.createAssignBar(x,y);
+    }
+
+    createAssignBar(x: number, y: number) {
+        let i = 0;
+
+        this.assignBar = [];
+        this.assignBar[i] = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'assignBarSide');
+        this.assignBar[i].setScale(2.0, 2.0);
+        this.assignBar[i].setOrigin(0);
+        this.assignBar[i].setPosition(x, y);
+        this.assignBar[i].setDepth(5000);
+        i++;
+
+        this.scene.add.existing(this.assignBar[0]);
+        while (i < this.cfg.numIteractions - 1) {
+            let offsetX = this.assignBar[i - 1].displayWidth;
+            this.assignBar[i] = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'assignBarCenter');
+            this.assignBar[i].setScale(2.0, 2.0);
+            this.assignBar[i].setOrigin(0);
+            this.assignBar[i].setPosition(x + offsetX * i, y);
+            this.assignBar[i].setDepth(5000);
+            this.scene.add.existing(this.assignBar[i]);
+            i++;
+        }
+        this.assignBar[i] = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'assignBarSide');
+        this.assignBar[i].setScale(2.0, 2.0);
+        this.assignBar[i].setOrigin(0);
+        this.assignBar[i].flipX = true;
+        this.assignBar[i].setPosition(x + this.assignBar[i - 1].displayWidth * i, y);
+        this.assignBar[i].setDepth(5000);
+        this.scene.add.existing(this.assignBar[i]);
     }
 
 
@@ -75,8 +110,9 @@ export default class Assignment {
      * completa con ellos
      */
     onInteractionCompleted() {
-        this.cfg.numIteractions--;
-        if (this.cfg.numIteractions == 0 ) {
+        this.currentInteractions++;
+        this.assignBar[this.currentInteractions-1].setFrame(1);
+        if (this.currentInteractions === this.cfg.numIteractions) {
             Assignment.assignmentCompleted.play();
             console.log("Assignment completed");
         } else {
