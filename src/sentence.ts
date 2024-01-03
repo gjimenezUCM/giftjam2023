@@ -15,6 +15,7 @@ export default class Sentence extends Phaser.GameObjects.Group {
         super(scene);
         const offset = 32;
         let x= offset/2;
+        x+=offset;
         const y=config.y;
         let pos = 0;
         this.cfg = config;

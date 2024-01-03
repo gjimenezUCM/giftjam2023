@@ -12,6 +12,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     private static contentFrames = 6;
     private loadingBarFrame: Phaser.GameObjects.Sprite;
     private loadingBarContent: Phaser.GameObjects.Sprite;
+    private interactionKeySprite: Phaser.GameObjects.Sprite;
     private totalClicks= 0;
     private currentClicks= 0;
     private activationKey: Phaser.Input.Keyboard.Key;
@@ -32,10 +33,13 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         super(scene, x, y, 'computer');
         this.loadingBarFrame = new Phaser.GameObjects.Sprite(this.scene,this.x, this.y, 'loadingBarFrame')
         this.loadingBarContent = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, 'loadingBarContent')
+        this.interactionKeySprite = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, "interactionKey");
+        this.interactionKeySprite.setScale(1.5);
         this.scene.add.existing(this.loadingBarFrame);
         this.scene.add.existing(this.loadingBarContent);
+        this.scene.add.existing(this.interactionKeySprite);
         if (this.scene.input.keyboard !== null) {
-            this.activationKey = this.scene.input.keyboard.addKey('Z');
+            this.activationKey = this.scene.input.keyboard.addKey('X');            
         }
         this.setVisible(false);
     }
@@ -56,6 +60,9 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         this.loadingBarContent.setFrame(Computer.contentFrames-1);
         this.loadingBarFrame.setVisible(true);
         this.loadingBarContent.setVisible(true);
+        this.interactionKeySprite.setPosition(this.x, this.y);
+        this.interactionKeySprite.setVisible(true);
+        this.interactionKeySprite.play('interactionKey-idle');
 
         this.currentClicks = 0;
         this.totalClicks = numberOfClicks;
@@ -72,6 +79,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     doShutdown(){
         this.loadingBarFrame.setVisible(false);
         this.loadingBarContent.setVisible(false);
+        this.interactionKeySprite.setVisible(false);
         this.computerState = "SLEEP";
         this.setActive(false);
         this.setVisible(false);
@@ -83,6 +91,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
      */
     preUpdate(t: number, dt: number) {
         super.preUpdate(t, dt);
+        this.interactionKeySprite.update(t,dt);
 
         // Si estamos en el estado WAITING (el jugador no ha pasado aún por aquí),
         // vamos descontando segundos

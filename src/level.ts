@@ -57,10 +57,10 @@ export default class Level extends Phaser.Scene {
         desktops.toggleVisible();
 
 
-        this.player = new Player(this, 0,0);
+        this.player = new Player(this);
         this.sentence = new Sentence(this, {
             sentence: " ¿Quién  tiene  el  kit? ",
-            y: 100,
+            y: 32*4 - 32/2,
             /**
              * Parámetros por defecto
              */

@@ -65,6 +65,10 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('assignBarCenter',
             'assignBarCenter.png',
             { frameWidth: 5, frameHeight: 8 });
+
+        this.load.spritesheet('interactionKey',
+            'interactionKey.png',
+            { frameWidth: 16, frameHeight: 16 });
             //this.load.image('goal', 'time_zone.png');
         //this.load.image('blood', 'blood.png');
         // this.load.spritesheet('sawblade2',
@@ -124,11 +128,13 @@ export default class Boot extends Phaser.Scene {
             repeat: -1,
             yoyo: true
         });
-        // Animación de barra de carga del computador
-        // this.anims.create({
-        //     key: 'loadingBar-frame',
-        //     frames: this.anims.generateFrameNumbers('loadingBar', { start: 0, end: 0 })
-        // });
+        // Animación de la tecla de interación
+        this.anims.create({
+            key: 'interactionKey-idle',
+            frames: this.anims.generateFrameNumbers('interactionKey', { start: 0, end: 2 }),
+            frameRate: 6,
+            repeat: -1
+        });
         // this.anims.create({
         //     key: 'loadingBar-content',
         //     frames: this.anims.generateFrameNumbers('loadingBar', { frames: [8,7,6,5,4,3] })

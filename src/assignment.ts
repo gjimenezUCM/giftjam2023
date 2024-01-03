@@ -21,6 +21,7 @@ export default class Assignment {
     private currentInteractions = 0;
     private theTimer = 0;
     private numInteractions = 0;
+    private completed = false;
 
     private static interactionCompleted: Phaser.Sound.HTML5AudioSound;
     private static assignmentCompleted: Phaser.Sound.HTML5AudioSound;
@@ -95,14 +96,17 @@ export default class Assignment {
 
 
     preUpdate(t: number, dt: number) {
-        this.theTimer+=dt;
-        if (this.theTimer > this.cfg.timePerDayMs * (this.currentDays+1)) {
-            this.currentDays++;
-            this.text.setText(`Entrega en ${this.cfg.numDays - this.currentDays} días`);
-            if (this.currentDays==this.cfg.numDays) {
-                console.log("Assignment: TERMINADA SIN ÉXITO");
-            } else {
-                this.activateComputer();
+        if (!this.completed){
+            this.theTimer+=dt;
+            if (this.theTimer > this.cfg.timePerDayMs * (this.currentDays+1)) {
+                this.currentDays++;
+                this.currentDays = this.currentDays > this.cfg.numDays ? this.cfg.numDays : this.currentDays;
+                this.text.setText(`Entrega en ${this.cfg.numDays - this.currentDays} días`);
+                if (this.currentDays==this.cfg.numDays) {
+                    this.text.setText("Práctica no entregada");
+                } else {
+                    this.activateComputer();
+                }
             }
         }
     }
@@ -134,7 +138,8 @@ export default class Assignment {
         this.assignBar[this.currentInteractions-1].setFrame(1);
         if (this.currentInteractions === this.cfg.numIteractions) {
             Assignment.assignmentCompleted.play();
-            console.log("Assignment completed");
+            this.text.setText("¡Práctica completada!");
+            this.completed = true;
         } else {
             Assignment.interactionCompleted.play();
         }

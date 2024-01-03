@@ -13,8 +13,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
      * @param {number} x Coordenada X
      * @param {number} y Coordenada Y
      */
-    constructor(scene: Phaser.Scene, x:number, y:number) {
-        super(scene, 9 * 64 - 32, 8 * 64 - 32, 'player');
+    constructor(scene: Phaser.Scene) {
+        super( scene,
+               <number>scene.game.config.width /2, 
+               <number>scene.game.config.height /2 - 16,
+               'player');
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setScale(1.0, 2/3);

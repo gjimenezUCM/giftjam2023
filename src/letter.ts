@@ -79,7 +79,7 @@ export default class Letter extends Phaser.GameObjects.Sprite {
             (<Level>this.scene).onPlayerDead();
         }
 
-        if (this.y >600){
+        if (this.y > <number>this.scene.game.config.height){
             this.theController.letterHasFinished(this);
         }
     }
