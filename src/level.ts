@@ -4,6 +4,7 @@ import Sentence from './sentence';
 import Computer from './computer';
 import Assignment from "./assignment";
 import { AssignmentResult } from "./configTypes"
+import {patterns} from './sentencePatterns';
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -17,8 +18,14 @@ export default class Level extends Phaser.Scene {
 
 
     player:Player;
-    private sentence: Sentence;
     private assignment: Assignment;
+
+    private activated: boolean;
+
+    private sentence: Sentence;
+    private sentencePatterns: Array<Sentence>;
+    private currentPattern: number;
+    private nextPattern: number;
 
     private clickSound: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
     
@@ -40,6 +47,7 @@ export default class Level extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
+        this.activated = false;
         let map = this.make.tilemap({
             key: 'tilemap',
             tileWidth: 32,
@@ -59,53 +67,55 @@ export default class Level extends Phaser.Scene {
         let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', [{ name: 'Desktop' }, {name: "wall"}]));
         desktops.toggleVisible();
 
+        this.sentencePatterns = [];
+        patterns.forEach( (pattern)=> {
+            this.sentencePatterns.push(new Sentence(this, pattern));
+        });
+        this.currentPattern = this.sentencePatterns.length;
+        this.nextPattern = this.sentencePatterns.length;
 
         this.player = new Player(this);
-        this.sentence = new Sentence(this, {
-            sentence: " ¿Quién  tiene  el  kit? ",
-            y: 32*4 - 32/2 -1,
-            /**
-             * Parámetros por defecto
-             */
-            delayBeforeShakeMs: 2000,
-            shakeMs: 1500,
-            fallSpeed: 400,
-            custom: [
-                {
-                    range: "9-13",
-                    delayBeforeShakeMs: 3000,                  
-                },
-                {
-                    range: "16-17",
-                    delayBeforeShakeMs: 4000,
-                },
-                {
-                    range: "20-23",
-                    delayBeforeShakeMs: 5000,
-                },                  
-            ]
-        });
         this.physics.add.collider(this.player, desktops);
+        this.player.setActive(false);
 
         let computerSet = map.createFromObjects('computers', { name: 'Computer', classType: Computer });
         this.clickSound = this.sound.add("blip");
         this.assignment = new Assignment(
             this,
-            8*32+8,
-            32+4,
+            8*32+8, 32+4,
             <Array<Computer>>computerSet,
             {
                 numIteractions: 5,
                 numDays: 15,
                 timePerDayMs: 2000,
                 maxActiveComputers: 3
-            });
+            }
+        );
+        this.time.addEvent({
+            delay: 1000,
+            callback: this.onStart,
+            callbackScope: this,
+            loop: false
+        });
+    }
 
+    onStart() {
+        this.assignment.onActivate();
+        this.nextPattern = 0;
+        this.player.setActive(true);
+        this.activated = true;
     }
 
     update(time:number, dt: number) {
-        this.sentence.preUpdate(time,dt);
-        this.assignment.preUpdate(time, dt);
+        if (this.activated){
+            if (this.currentPattern !== this.nextPattern) {
+                this.currentPattern = this.nextPattern;
+                this.sentence = this.sentencePatterns[this.currentPattern];
+                this.sentence.onActivate();
+            }
+            this.sentence.preUpdate(time,dt);
+            this.assignment.preUpdate(time, dt);
+        }
     }
 
     onPlayerDead() {           
@@ -126,13 +136,21 @@ export default class Level extends Phaser.Scene {
 
     onLevelCompleted(result: AssignmentResult) {
         this.player.setActive(false);
+        this.sentence.onLevelComplete();
         this.sentence.setActive(false);
         this.time.addEvent({
-            delay: 1000,
+            delay: 1500,
             callback: () => { this.scene.start('menu'); },
             callbackScope: this,
             loop: false
         });
+    }
+
+    onSentenceCompleted() {
+        this.nextPattern++;
+        if (this.nextPattern === this.sentencePatterns.length) {
+            this.nextPattern = 0;
+        }
     }
 
 }

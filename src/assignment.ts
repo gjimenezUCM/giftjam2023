@@ -25,6 +25,7 @@ export default class Assignment {
     private theTimer = 0;
     private numInteractions = 0;
     private completed = false;
+    private activated = false;
     
     private result: AssignmentResult;
     /**
@@ -53,6 +54,10 @@ export default class Assignment {
         Assignment.interactionCompletedSound = this.scene.sound.add("interactionCompleted");
         Assignment.assignmentCompletedSound = this.scene.sound.add("assignmentCompleted");
         this.createUI(x,y);
+    }
+
+    onActivate() {
+        this.activated = true;
     }
 
     createUI(x: number, y: number) {
@@ -107,7 +112,7 @@ export default class Assignment {
 
 
     preUpdate(t: number, dt: number) {
-        if (!this.completed){
+        if (this.activated && !this.completed){
             this.theTimer+=dt;
             // Añadimos un día más al conteo
             if (this.theTimer > this.cfg.timePerDayMs * (this.currentDays+1)) {

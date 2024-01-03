@@ -1,5 +1,6 @@
 import { CustomLetterConfig, LetterConfig, SentenceConfig } from "./configTypes";
 import Letter from "./letter";
+import Level from "./level";
 export default class Sentence extends Phaser.GameObjects.Group {
 
     /**
@@ -52,14 +53,20 @@ export default class Sentence extends Phaser.GameObjects.Group {
             x+=offset;
             pos++;
         }
-        this.activateLetters();
+        //this.activateLetters();
     }
 
-    activateLetters() {
+    onActivate() {
         for (let letter of this.getChildren()) {
             (<Letter>letter).onEnable();
         }
         this.numAliveLetters = this.numLetters;
+    }
+
+    onLevelComplete() {
+        for (let letter of this.getChildren()) {
+            this.killAndHide(letter);
+        }   
     }
 
     letterHasFinished(aLetter:Letter) {
@@ -69,11 +76,10 @@ export default class Sentence extends Phaser.GameObjects.Group {
 
     preUpdate(t: number, dt: number) {
         if (this.numAliveLetters == 0) {
-            this.activateLetters();
+            //this.onActivate();
+            (<Level>this.scene).onSentenceCompleted();
         }
     }
-
-
 
     parseCustomLetters() {
         let result: Array<CustomLetterConfig> = [];
