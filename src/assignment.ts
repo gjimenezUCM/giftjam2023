@@ -26,6 +26,7 @@ export default class Assignment {
     private static assignmentCompleted: Phaser.Sound.HTML5AudioSound;
 
     private assignBar: Array<Phaser.GameObjects.Sprite>;
+    private text: Phaser.GameObjects.Text;
 
 
     constructor(scene: Phaser.Scene, x:number, y:number, computerSet: Array<Computer>, config: AssignmentConfig) {
@@ -39,16 +40,26 @@ export default class Assignment {
         this.currentActiveComputers = 0;
         Assignment.interactionCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("interactionCompleted");
         Assignment.assignmentCompleted = <Phaser.Sound.HTML5AudioSound>this.scene.sound.add("assignmentCompleted");
-        this.createAssignBar(x,y);
+        this.createUI(x,y);
     }
 
-    createAssignBar(x: number, y: number) {
-        let i = 0;
+    createUI(x: number, y: number) {
+        let title = this.scene.add.text(
+            x, y,
+            `Práctica 0`,
+            { fontFamily: 'Minecraft', fontSize: 18, color: '#ffffff' });
+        title.setDepth(5000);
 
+        let origX = x;
+        let xOffset = title.displayWidth + 5;
+        x += xOffset;
+        let i = 0;
+        let yOffset = title.displayHeight/2;
+        y += yOffset;
         this.assignBar = [];
         this.assignBar[i] = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'assignBarSide');
         this.assignBar[i].setScale(2.0, 2.0);
-        this.assignBar[i].setOrigin(0);
+        this.assignBar[i].setOrigin(0,0.5);
         this.assignBar[i].setPosition(x, y);
         this.assignBar[i].setDepth(5000);
         i++;
@@ -58,7 +69,7 @@ export default class Assignment {
             let offsetX = this.assignBar[i - 1].displayWidth;
             this.assignBar[i] = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'assignBarCenter');
             this.assignBar[i].setScale(2.0, 2.0);
-            this.assignBar[i].setOrigin(0);
+            this.assignBar[i].setOrigin(0,0.5);
             this.assignBar[i].setPosition(x + offsetX * i, y);
             this.assignBar[i].setDepth(5000);
             this.scene.add.existing(this.assignBar[i]);
@@ -66,11 +77,20 @@ export default class Assignment {
         }
         this.assignBar[i] = new Phaser.GameObjects.Sprite(this.scene, 0, 0, 'assignBarSide');
         this.assignBar[i].setScale(2.0, 2.0);
-        this.assignBar[i].setOrigin(0);
+        this.assignBar[i].setOrigin(0,0.5);
         this.assignBar[i].flipX = true;
         this.assignBar[i].setPosition(x + this.assignBar[i - 1].displayWidth * i, y);
         this.assignBar[i].setDepth(5000);
         this.scene.add.existing(this.assignBar[i]);
+
+        y += yOffset ;
+        this.text = this.scene.add.text(
+            origX, y,
+            `Entrega en ${this.cfg.numDays - this.currentDays} días`, 
+            { fontFamily: 'Minecraft', fontSize: 18, color: '#ffffff' });
+        this.text.setOrigin(0, 0);
+        this.text.setAlign('left');
+        this.text.setDepth(5000);
     }
 
 
@@ -78,7 +98,7 @@ export default class Assignment {
         this.theTimer+=dt;
         if (this.theTimer > this.cfg.timePerDayMs * (this.currentDays+1)) {
             this.currentDays++;
-            console.log("Día", this.currentDays)
+            this.text.setText(`Entrega en ${this.cfg.numDays - this.currentDays} días`);
             if (this.currentDays==this.cfg.numDays) {
                 console.log("Assignment: TERMINADA SIN ÉXITO");
             } else {

@@ -7,8 +7,8 @@ window.onload = () => {
         type: Phaser.WEBGL,
         parent: "thegame",
         scale: {
-            width: 800,
-            height: 600,
+            width: 864,
+            height: 704,
             autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
         },
         pixelArt: true,

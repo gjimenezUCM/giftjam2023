@@ -53,7 +53,7 @@ export default class Level extends Phaser.Scene {
             let screens = map.createLayer('screens', [tileset2, tileset3]);
             screens?.setDepth(1000);
         }
-        let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', { name: 'Desktop' }));
+        let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', [{ name: 'Desktop' }, {name: "wall"}]));
         desktops.toggleVisible();
 
 
@@ -94,8 +94,8 @@ export default class Level extends Phaser.Scene {
         let computerSet = map.createFromObjects('computers', { name: 'Computer', classType: Computer });
         this.assignment = new Assignment(
             this,
-            400,
-            50,
+            8*32+8,
+            32+4,
             <Array<Computer>>computerSet,
             {
                 numIteractions: 5,

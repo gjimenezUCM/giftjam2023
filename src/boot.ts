@@ -15,10 +15,20 @@ export default class Boot extends Phaser.Scene {
         super({ key: 'boot' });
     }
 
+    loadFont(name:string, url: string) {
+        let newFont = new FontFace(name, `url(${url})`);
+        newFont.load().then(function (loaded) {
+            document.fonts.add(loaded);
+        }).catch(function (error) {
+            return error;
+        });
+    }
+
     /**
      * Carga de los assets del juego
      */
     preload() {
+        this.loadFont("Minecraft", "/assets/fonts/Minecraftia.ttf");
         this.load.tilemapTiledJSON('tilemap', 'assets/maps/lab.json');
         this.load.audio("dead", "assets/sounds/dead.wav");
         this.load.audio("interactionCompleted", "assets/sounds/interactionCompleted.wav");
