@@ -1,8 +1,8 @@
 import Computer from './computer';
-import { AssignmentConfig } from './configTypes';
+import { AssignmentConfig, AssignmentResult } from './configTypes';
 import Level from './level';
 
-type resultType = "PASS" | "FAIL";
+
 export default class Assignment {
 
     private cfg: AssignmentConfig;
@@ -17,7 +17,7 @@ export default class Assignment {
      * Escena de Phaser. Para avisar de si se ha conseguido o no completar
      * la práctica
      */
-    private scene: Phaser.Scene;
+    private scene: Level;
 
     private currentActiveComputers = 0;
     private currentDays = 0;
@@ -26,16 +26,22 @@ export default class Assignment {
     private numInteractions = 0;
     private completed = false;
     
-    private result: resultType;
+    private result: AssignmentResult;
+    /**
+     * Sounds
+     */
+    private static interactionCompletedSound: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
+    private static assignmentCompletedSound: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
+    
 
-    private static interactionCompleted: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
-    private static assignmentCompleted: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
-
+    /**
+     * UI
+     */
     private assignBar: Array<Phaser.GameObjects.Sprite>;
     private text: Phaser.GameObjects.Text;
 
 
-    constructor(scene: Phaser.Scene, x:number, y:number, computerSet: Array<Computer>, config: AssignmentConfig) {
+    constructor(scene: Level, x:number, y:number, computerSet: Array<Computer>, config: AssignmentConfig) {
         this.scene = scene;
         this.cfg = config;
         this.computers = this.scene.physics.add.group(computerSet);
@@ -44,8 +50,8 @@ export default class Assignment {
             (<Computer>computer).doShutdown();
         }
         this.currentActiveComputers = 0;
-        Assignment.interactionCompleted = this.scene.sound.add("interactionCompleted");
-        Assignment.assignmentCompleted = this.scene.sound.add("assignmentCompleted");
+        Assignment.interactionCompletedSound = this.scene.sound.add("interactionCompleted");
+        Assignment.assignmentCompletedSound = this.scene.sound.add("assignmentCompleted");
         this.createUI(x,y);
     }
 
@@ -111,9 +117,9 @@ export default class Assignment {
                 // Comprobamos si hemos llegado al deadline
                 if (this.currentDays==this.cfg.numDays) {
                     this.text.setText("Práctica no entregada");
-                    (<Level>this.scene).onPlayerDead(); 
+                    this.scene.onPlayerDead(); 
                     this.completed = true;
-                    this.completeAndShutdown("FAIL");
+                    this.completeAndShutdown({ resultType: "FAIL" });
     
                 } else {
                     this.activateComputer();
@@ -153,21 +159,22 @@ export default class Assignment {
             // Se han completado todas las interacciones por lo que
             // se ha terminado la práctica a tiempo
             if (this.currentInteractions === this.cfg.numIteractions) {
-                Assignment.assignmentCompleted.play();
+                Assignment.assignmentCompletedSound.play();
                 this.text.setText("¡Práctica completada!");
-                this.completeAndShutdown("PASS");
+                this.completeAndShutdown({resultType: "PASS"});
             } else {
-                Assignment.interactionCompleted.play();
+                Assignment.interactionCompletedSound.play();
             }
         }
     }
 
-    completeAndShutdown(result: resultType) {
+    completeAndShutdown(result: AssignmentResult) {
         for (let computer of this.computers.getChildren()) {
             (<Computer>computer).doShutdown();
         }
         this.result = result;
         this.completed = true;
+        this.scene.onLevelCompleted(result);
     }
 
 

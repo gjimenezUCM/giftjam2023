@@ -54,9 +54,11 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('loadingBarContent',
             'loadingBar.png',
             { frameWidth: 16, frameHeight: 32, startFrame: 3, endFrame: 9 });
+        this.load.image('menuBg', 'menu.png');
         this.load.image('wallfloor-ts', 'room/wall-floor.png');
         this.load.image('screens-ts', 'room/screens.png');
         this.load.image('office-ts', 'room/office.png');
+        
         this.load.spritesheet('assignBarSide',
             'assignBarSide.png',
             { frameWidth: 6, frameHeight: 8 });
@@ -66,6 +68,10 @@ export default class Boot extends Phaser.Scene {
 
         this.load.spritesheet('interactionKey',
             'interactionKey.png',
+            { frameWidth: 16, frameHeight: 16 });
+
+        this.load.spritesheet('startKey',
+            'startKey.png',
             { frameWidth: 16, frameHeight: 16 });
             //this.load.image('goal', 'time_zone.png');
         //this.load.image('blood', 'blood.png');
@@ -133,12 +139,18 @@ export default class Boot extends Phaser.Scene {
             frameRate: 6,
             repeat: -1
         });
+        this.anims.create({
+            key: 'startKey-idle',
+            frames: this.anims.generateFrameNumbers('startKey', { start: 0, end: 2 }),
+            frameRate: 6,
+            repeat: -1
+        });
         // this.anims.create({
         //     key: 'loadingBar-content',
         //     frames: this.anims.generateFrameNumbers('loadingBar', { frames: [8,7,6,5,4,3] })
         // });
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];
-        this.scene.start('level');
+        this.scene.start('menu');
     }
 }

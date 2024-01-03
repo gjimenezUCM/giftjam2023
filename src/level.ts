@@ -3,6 +3,7 @@ import Player from './player';
 import Sentence from './sentence';
 import Computer from './computer';
 import Assignment from "./assignment";
+import { AssignmentResult } from "./configTypes"
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -20,8 +21,8 @@ export default class Level extends Phaser.Scene {
     private assignment: Assignment;
 
     private clickSound: Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound | Phaser.Sound.NoAudioSound;
+    
 
-    private activationKey: Phaser.Input.Keyboard.Key;
     /**
      * Constructor de la escena
      */
@@ -86,18 +87,8 @@ export default class Level extends Phaser.Scene {
         });
         this.physics.add.collider(this.player, desktops);
 
-        if (this.input.keyboard !== null) {
-            this.activationKey = this.input.keyboard.addKey('M');
-        }
-
-        // this.discGroup = this.add.group();
-        // this.discGroup.add(new EdgeDisc(this));
-        // //this.discGroup.add(new BouncingDisc(this, 400, 300));
-        // this.physics.add.overlap(this.player, this.discGroup, (player, disc) => disc.onCollision(player));
-        // this.physics.add.overlap(this.player, this.door, (player, door) => door.onOverlap());
-        // //this.physics.add.collider(this.discGroup, this.groundLayer);
-
         let computerSet = map.createFromObjects('computers', { name: 'Computer', classType: Computer });
+        this.clickSound = this.sound.add("blip");
         this.assignment = new Assignment(
             this,
             8*32+8,
@@ -110,7 +101,6 @@ export default class Level extends Phaser.Scene {
                 maxActiveComputers: 3
             });
 
-        this.clickSound = this.sound.add('blip');
     }
 
     update(time:number, dt: number) {
@@ -118,14 +108,31 @@ export default class Level extends Phaser.Scene {
         this.assignment.preUpdate(time, dt);
     }
 
-    onPlayerDead() {
-            console.log("Lo maté");            
-            this.player.onDead();
+    onPlayerDead() {           
+        this.player.onDead();
+        this.sentence.setActive(false);
+        this.time.addEvent({
+            delay: 1000,
+            callback: () => { this.scene.start('menu'); },
+            callbackScope: this,
+            loop: false
+        });
     }
 
     performClick() {
         this.clickSound.detune = Phaser.Math.RND.integerInRange(-300, 300);
         this.clickSound.play();
+    }
+
+    onLevelCompleted(result: AssignmentResult) {
+        this.player.setActive(false);
+        this.sentence.setActive(false);
+        this.time.addEvent({
+            delay: 1000,
+            callback: () => { this.scene.start('menu'); },
+            callbackScope: this,
+            loop: false
+        });
     }
 
 }

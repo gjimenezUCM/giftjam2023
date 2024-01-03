@@ -103,3 +103,7 @@ export interface AssignmentConfig {
      */
     maxActiveComputers: number;
 }
+
+export interface AssignmentResult {
+    resultType: "PASS" | "FAIL"
+}
