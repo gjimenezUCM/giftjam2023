@@ -21,6 +21,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setScale(1.0, 2/3);
+        this.setDepth(800);
         let halfHeight = (<Phaser.Physics.Arcade.Body>this.body).halfHeight;
         let halfWidth = (<Phaser.Physics.Arcade.Body>this.body).halfWidth;
         (<Phaser.Physics.Arcade.Body>this.body).setCircle(halfWidth, 0, halfHeight - halfWidth);

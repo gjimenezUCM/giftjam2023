@@ -58,11 +58,10 @@ export default class Level extends Phaser.Scene {
         const tileset3 = map.addTilesetImage('office', 'office-ts');
         let deskLayer;
         if (tileset1 && tileset2 && tileset3){
-            map.createLayer('walls', tileset1);
-            map.createLayer('floor', tileset1);
-            deskLayer = map.createLayer('desks', tileset3);
-            let screens = map.createLayer('screens', [tileset2, tileset3]);
-            screens?.setDepth(1000);
+            map.createLayer('walls', tileset1)?.setDepth(100);
+            map.createLayer('floor', tileset1)?.setDepth(200);
+            deskLayer = map.createLayer('desks', tileset3)?.setDepth(300);
+            map.createLayer('screens', [tileset2, tileset3])?.setDepth(1000);
         }
         let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', [{ name: 'Desktop' }, {name: "wall"}]));
         desktops.toggleVisible();

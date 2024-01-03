@@ -58,6 +58,10 @@ export default class Boot extends Phaser.Scene {
         this.load.image('wallfloor-ts', 'room/wall-floor.png');
         this.load.image('screens-ts', 'room/screens.png');
         this.load.image('office-ts', 'room/office.png');
+
+        this.load.spritesheet('tutorial1',
+            'tutorial/tutorial1.png',
+            { frameWidth: 320, frameHeight: 240, startFrame: 0, endFrame: 19 });
         
         this.load.spritesheet('assignBarSide',
             'assignBarSide.png',
@@ -142,6 +146,13 @@ export default class Boot extends Phaser.Scene {
         this.anims.create({
             key: 'startKey-idle',
             frames: this.anims.generateFrameNumbers('startKey', { start: 0, end: 1 }),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'tutorial1-idle',
+            frames: this.anims.generateFrameNumbers('tutorial1', { start: 0, end: 19 }),
             frameRate: 6,
             repeat: -1
         });

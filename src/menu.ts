@@ -64,6 +64,10 @@ export default class Menu extends Phaser.Scene {
         startKeySprite.play("startKey-idle");
         startKeySprite.setDepth(5000);
 
+        // let tutorial = this.add.sprite(600, 600, "tutorial1");
+        // tutorial.setDepth(5000);
+        // tutorial.play("tutorial1-idle");
+
         if (this.input.keyboard !== null) {
             this.activationKey = this.input.keyboard.addKey('E');
         }

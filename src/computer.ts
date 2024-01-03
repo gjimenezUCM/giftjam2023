@@ -31,13 +31,14 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'computer');
-        this.loadingBarFrame = new Phaser.GameObjects.Sprite(this.scene,this.x, this.y, 'loadingBarFrame')
+        this.setDepth(400);
+        this.loadingBarFrame = new Phaser.GameObjects.Sprite(this.scene,this.x, this.y, 'loadingBarFrame');
         this.loadingBarContent = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, 'loadingBarContent')
         this.interactionKeySprite = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, "interactionKey");
         this.interactionKeySprite.setScale(1.5);
-        this.scene.add.existing(this.loadingBarFrame);
-        this.scene.add.existing(this.loadingBarContent);
-        this.scene.add.existing(this.interactionKeySprite);
+        this.scene.add.existing(this.loadingBarFrame).setDepth(400);
+        this.scene.add.existing(this.loadingBarContent).setDepth(400);
+        this.scene.add.existing(this.interactionKeySprite).setDepth(400);
         if (this.scene.input.keyboard !== null) {
             this.activationKey = this.scene.input.keyboard.addKey('X');            
         }
