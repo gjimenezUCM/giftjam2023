@@ -1,7 +1,8 @@
 import { SentenceConfig } from "./configTypes";
 
-let patterns: Array<SentenceConfig>;
-patterns = [
+let patterns: Array < Array<SentenceConfig> >;
+
+let P0patterns = [
     {
         sentence: " ¿Quién  tiene  el  kit? ",
         y: 32 * 4 - 32 / 2 - 1,
@@ -62,7 +63,12 @@ patterns = [
                 delayBeforeShakeMs: 3000,
             },
         ]
-    }
+    }]
+patterns = [
+    P0patterns,
+    P0patterns,
+    P0patterns,
+    P0patterns
 ]
 
 export {patterns};

@@ -74,7 +74,8 @@ export default class Level extends Phaser.Scene {
         desktops.toggleVisible();
 
         this.sentencePatterns = [];
-        patterns.forEach( (pattern)=> {
+        // Seleccionamos los patrones de la práctica asociada
+        patterns[this.assignmentIndex].forEach( (pattern)=> {
             this.sentencePatterns.push(new Sentence(this, pattern));
         });
         this.currentPattern = this.sentencePatterns.length;
