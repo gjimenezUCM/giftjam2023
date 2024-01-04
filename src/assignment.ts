@@ -63,7 +63,7 @@ export default class Assignment {
     createUI(x: number, y: number) {
         let title = this.scene.add.text(
             x, y,
-            `Práctica 0`,
+            this.cfg.assignmentId,
             { fontFamily: 'Minecraft', fontSize: 18, color: '#ffffff' });
         title.setDepth(5000);
 

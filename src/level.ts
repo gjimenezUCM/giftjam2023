@@ -3,8 +3,9 @@ import Player from './player';
 import Sentence from './sentence';
 import Computer from './computer';
 import Assignment from "./assignment";
-import { AssignmentResult } from "./configTypes"
+import { AssignmentResult, LevelData } from "./configTypes"
 import {patterns} from './sentencePatterns';
+import { theAssignments } from './assignmentData';
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -17,8 +18,9 @@ import {patterns} from './sentencePatterns';
 export default class Level extends Phaser.Scene {
 
 
-    player:Player;
+    player: Player;
     private assignment: Assignment;
+    private assignmentIndex: number;
 
     private activated: boolean;
 
@@ -37,11 +39,9 @@ export default class Level extends Phaser.Scene {
         super({ key: 'level' });
     }
 
-    // init(data) {
-    //     this.spawnTime = data.spawnTime;
-    //     this.discSpeed = data.discSpeed;
-    //     this.goalTime = data.goalTime;
-    // }
+    init(data:LevelData) {
+        this.assignmentIndex = data.nextAssignment || 0;
+    }
 
     /**
      * Creación de los elementos de la escena principal de juego
@@ -83,12 +83,7 @@ export default class Level extends Phaser.Scene {
             this,
             8*32+8, 32+4,
             <Array<Computer>>computerSet,
-            {
-                numIteractions: 5,
-                numDays: 15,
-                timePerDayMs: 2000,
-                maxActiveComputers: 3
-            }
+            theAssignments[this.assignmentIndex]
         );
         this.time.addEvent({
             delay: 1000,
@@ -139,10 +134,19 @@ export default class Level extends Phaser.Scene {
         this.sentence.setActive(false);
         this.time.addEvent({
             delay: 1500,
-            callback: () => { this.scene.start('menu'); },
+            callback: () => { this.resolveNextLevel(); },
             callbackScope: this,
             loop: false
         });
+    }
+
+    resolveNextLevel() {
+        this.assignmentIndex++;
+        if (this.assignmentIndex === theAssignments.length) {
+            this.scene.start('menu');
+        } else {
+            this.scene.start('level', { nextAssignment: this.assignmentIndex });
+        }
     }
 
     onSentenceCompleted() {

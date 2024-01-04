@@ -82,6 +82,7 @@ export interface CustomLetterConfig {
 }
 
 export interface AssignmentConfig {
+    assignmentId: string,
     /**
      * Número de veces que hay que interactuar con los computadores
      * para completar la práctica
@@ -106,4 +107,8 @@ export interface AssignmentConfig {
 
 export interface AssignmentResult {
     resultType: "PASS" | "FAIL"
+}
+
+export interface LevelData {
+    nextAssignment: number
 }
