@@ -48,6 +48,7 @@ export default class Level extends Phaser.Scene {
      */
     create() {
         this.activated = false;
+
         let map = this.make.tilemap({
             key: 'tilemap',
             tileWidth: 32,
@@ -56,12 +57,15 @@ export default class Level extends Phaser.Scene {
         const tileset1 = map.addTilesetImage('wall-floor', 'wallfloor-ts');
         const tileset2 = map.addTilesetImage('screens', 'screens-ts');
         const tileset3 = map.addTilesetImage('office', 'office-ts');
+        const tileset4 = map.addTilesetImage('floors', 'floors-ts');
+        const tileset5 = map.addTilesetImage('baseboards', 'baseboards-ts');
         let deskLayer;
-        if (tileset1 && tileset2 && tileset3){
-            map.createLayer('walls', tileset1)?.setDepth(100);
-            map.createLayer('floor', tileset1)?.setDepth(200);
-            deskLayer = map.createLayer('desks', tileset3)?.setDepth(300);
-            map.createLayer('screens', [tileset2, tileset3])?.setDepth(1000);
+        if (tileset1 && tileset2 && tileset3 && tileset4 && tileset5) {
+            map.createLayer('walls', [tileset1, tileset4, tileset5]);
+            map.createLayer('floor', [tileset1, tileset4, tileset5]);
+            deskLayer = map.createLayer('desks', tileset3);
+            let screens = map.createLayer('screens', [tileset2, tileset3]);
+            screens?.setDepth(1000);
         }
         let desktops = this.physics.add.staticGroup(map.createFromObjects('collisions', [{ name: 'Desktop' }, {name: "wall"}]));
         desktops.toggleVisible();

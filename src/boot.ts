@@ -33,7 +33,11 @@ export default class Boot extends Phaser.Scene {
         this.load.audio("dead", "assets/sounds/dead.wav");
         this.load.audio("interactionCompleted", "assets/sounds/interactionCompleted.wav");
         this.load.audio("assignmentCompleted", "assets/sounds/assignmentCompleted.wav");
-        this.load.audio('blip', 'assets/sounds/Blip.wav');            
+        this.load.audio('blip', 'assets/sounds/Blip.wav');  
+        this.load.audio("soundtrack", [
+            "assets/sounds/soundtrack2.ogg",
+            "assets/sounds/soundtrack2.mp3",
+        ]);          
         // Con setPath podemos establecer el prefijo que se añadirá a todos los load que aparecen a continuación
         this.load.setPath('assets/sprites/');
         this.load.spritesheet('player',
@@ -58,6 +62,8 @@ export default class Boot extends Phaser.Scene {
         this.load.image('wallfloor-ts', 'room/wall-floor.png');
         this.load.image('screens-ts', 'room/screens.png');
         this.load.image('office-ts', 'room/office.png');
+        this.load.image('floors-ts', 'room/floors.png');
+        this.load.image('baseboards-ts', 'room/baseboards.png');
 
         this.load.spritesheet('tutorial1',
             'tutorial/tutorial1.png',
@@ -77,17 +83,10 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('startKey',
             'startKey.png',
             { frameWidth: 16, frameHeight: 16 });
-            //this.load.image('goal', 'time_zone.png');
-        //this.load.image('blood', 'blood.png');
-        // this.load.spritesheet('sawblade2',
-        //     'sawblade2.png',
-        //     { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('sawblade',
-        //     'sawblade.png',
-        //     { frameWidth: 64, frameHeight: 64 });
-        // this.load.spritesheet('door',
-        //     'door.png',
-        //     { frameWidth: 64, frameHeight: 64 });
+
+        this.load.spritesheet('creditsKey',
+            'keys/c.png',
+            { frameWidth: 16, frameHeight: 16 });
     }
 
     /**
@@ -151,17 +150,23 @@ export default class Boot extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: 'tutorial1-idle',
-            frames: this.anims.generateFrameNumbers('tutorial1', { start: 0, end: 19 }),
+            key: 'creditsKey-idle',
+            frames: this.anims.generateFrameNumbers('creditsKey', { start: 0, end: 1 }),
             frameRate: 6,
             repeat: -1
         });
+
         // this.anims.create({
-        //     key: 'loadingBar-content',
-        //     frames: this.anims.generateFrameNumbers('loadingBar', { frames: [8,7,6,5,4,3] })
+        //     key: 'tutorial1-idle',
+        //     frames: this.anims.generateFrameNumbers('tutorial1', { start: 0, end: 19 }),
+        //     frameRate: 6,
+        //     repeat: -1
         // });
+
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];
+        this.sound.add("soundtrack", { loop: true, delay: 200 }).play();
+
         this.scene.start('menu');
     }
 }

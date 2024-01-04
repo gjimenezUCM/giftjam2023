@@ -8,9 +8,10 @@ export default class Explosion extends Phaser.GameObjects.Sprite {
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'dead');
         this.scene.add.existing(this).setDepth(500);
+        this.scene.sound.play("dead");
         this.setScale(1.0, 0.7)
         this.play('idle');
-        this.scene.sound.add("dead").play();
+        
         this.on('animationcomplete', ()=> {
             this.destroy();
         })

@@ -2,6 +2,7 @@ import 'phaser';
  import Boot from './boot';
  import Level from './level';
  import Menu from './menu';
+ import Credits from './credits';
 
 window.onload = () => {
     let configObject: Phaser.Types.Core.GameConfig = {
@@ -13,7 +14,7 @@ window.onload = () => {
             autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
         },
         pixelArt: true,
-        scene: [Boot, Menu, Level],
+        scene: [Boot, Credits, Menu, Level],
         physics: {
             default: 'arcade',
             arcade: {
@@ -22,6 +23,9 @@ window.onload = () => {
                 },
                 debug: false
             }
+        },
+        audio: {
+            disableWebAudio: false,
         },
         seed: ["gramola"]
     };
