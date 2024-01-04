@@ -40,7 +40,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         this.scene.add.existing(this.loadingBarContent).setDepth(400);
         this.scene.add.existing(this.interactionKeySprite).setDepth(400);
         if (this.scene.input.keyboard !== null) {
-            this.activationKey = this.scene.input.keyboard.addKey('X');            
+            this.activationKey = this.scene.input.keyboard.addKey('C');            
         }
         this.setVisible(false);
     }

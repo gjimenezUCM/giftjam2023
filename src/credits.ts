@@ -98,7 +98,7 @@ export default class Credits extends Phaser.Scene {
 
         // Descripción tras el título
         let paragraph = "Un regalo para los estudiantes de la asignatura de Videojuegos en consola 23/24\n"+
-        "del Grado en Desarrollo de Videojuegos de la Universidad Complutense...";
+        "del Grado en Desarrollo de Videojuegos de la Universidad Complutense:";
 
         let numCols = 4;
         yPos = this.writeParagraph(xPos, yPos, paragraph, 5);
@@ -131,7 +131,8 @@ export default class Credits extends Phaser.Scene {
         }
         yPos = maxYPos;
         paragraph =
-            `...y para los que la cursaron...\n...y para los que la cursarán`
+            "Y para los estudiantes que la cursaron...\n"+
+            "...y para los estudiantes que la cursarán.";
         xPos = <number>this.game.config.width / 2;
         yPos = this.writeParagraph(xPos, yPos+16, paragraph, 5);
 
@@ -160,14 +161,14 @@ export default class Credits extends Phaser.Scene {
         startText.setAlign('center');
 
         let startKeySpriteX = startTextPosX + startText.displayWidth/2 + 5;
-        let startKeySprite = this.add.existing(new Phaser.GameObjects.Sprite(this, 0, 0, 'startKey'));
+        let startKeySprite = this.add.existing(new Phaser.GameObjects.Sprite(this, 0, 0, 'returnKey'));
         startKeySprite.setScale(2.0, 2.0);
         startKeySprite.setOrigin(0, 0);
         startKeySprite.setPosition(startKeySpriteX, startTextPosY-16);
-        startKeySprite.play("startKey-idle");
+        startKeySprite.play("returnKey-idle");
         startKeySprite.setDepth(5000);
         if (this.input.keyboard !== null) {
-            this.activationKey = this.input.keyboard.addKey('E');
+            this.activationKey = this.input.keyboard.addKey('M');
         }
     }
 

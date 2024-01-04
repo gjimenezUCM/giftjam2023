@@ -77,16 +77,24 @@ export default class Boot extends Phaser.Scene {
             { frameWidth: 5, frameHeight: 8 });
 
         this.load.spritesheet('interactionKey',
-            'interactionKey.png',
+            'keys/c.png',
             { frameWidth: 16, frameHeight: 16 });
 
         this.load.spritesheet('startKey',
-            'startKey.png',
+            'keys/e.png',
             { frameWidth: 16, frameHeight: 16 });
 
         this.load.spritesheet('creditsKey',
             'keys/c.png',
             { frameWidth: 16, frameHeight: 16 });
+
+        this.load.spritesheet('returnKey',
+            'keys/m.png',
+            { frameWidth: 16, frameHeight: 16 });
+
+        this.load.spritesheet('passFail',
+            'passFail.png',
+            { frameWidth: 32, frameHeight: 32 });
     }
 
     /**
@@ -148,13 +156,33 @@ export default class Boot extends Phaser.Scene {
             frameRate: 6,
             repeat: -1
         });
-
         this.anims.create({
             key: 'creditsKey-idle',
             frames: this.anims.generateFrameNumbers('creditsKey', { start: 0, end: 1 }),
             frameRate: 6,
             repeat: -1
         });
+        this.anims.create({
+            key: 'returnKey-idle',
+            frames: this.anims.generateFrameNumbers('returnKey', { start: 0, end: 1 }),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'PASS',
+            frames: this.anims.generateFrameNumbers('passFail', { start: 0, end: 7 }),
+            frameRate: 16,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'FAIL',
+            frames: this.anims.generateFrameNumbers('passFail', { start: 16, end: 23 }),
+            frameRate: 16,
+            repeat: -1
+        });
+
 
         // this.anims.create({
         //     key: 'tutorial1-idle',
@@ -166,7 +194,7 @@ export default class Boot extends Phaser.Scene {
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];
         this.sound.add("soundtrack", { loop: true, delay: 200 }).play();
-
         this.scene.start('menu');
+
     }
 }

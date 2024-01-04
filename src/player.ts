@@ -7,6 +7,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
     private speed:number;
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     isDead = false;
+    private initX: number;
+    private initY: number;
     /**
      * Constructor del jugador
      * @param {Phaser.Scene} scene Escena a la que pertenece el jugador
@@ -14,10 +16,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
      * @param {number} y Coordenada Y
      */
     constructor(scene: Phaser.Scene) {
+        let x = <number>scene.game.config.width / 2;
+        let y = <number>scene.game.config.height / 2 - 16;
         super( scene,
-               <number>scene.game.config.width /2, 
-               <number>scene.game.config.height /2 - 16,
+               x, 
+               y,
                'player');
+        this.initX = x;
+        this.initY = y;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
         this.setScale(1.0, 2/3);
@@ -72,6 +78,14 @@ export default class Player extends Phaser.GameObjects.Sprite {
         new Explosion(this.scene, this.x, this.y);
         this.setVisible(false);
         this.setActive(false);
+    }
+
+    onRestart() {
+        (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = false;
+        this.setVisible(true);
+        this.setActive(true);
+        this.setPosition(this.initX, this.initY);   
+        this.play('down');    
     }
 
 }

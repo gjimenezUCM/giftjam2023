@@ -3,6 +3,7 @@ import 'phaser';
  import Level from './level';
  import Menu from './menu';
  import Credits from './credits';
+ import Final from './final';
 
 window.onload = () => {
     let configObject: Phaser.Types.Core.GameConfig = {
@@ -14,7 +15,8 @@ window.onload = () => {
             autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
         },
         pixelArt: true,
-        scene: [Boot, Credits, Menu, Level],
+        backgroundColor: '#2b2f4e',
+        scene: [Boot, Credits, Menu, Level, Final],
         physics: {
             default: 'arcade',
             arcade: {
@@ -23,9 +25,6 @@ window.onload = () => {
                 },
                 debug: false
             }
-        },
-        audio: {
-            disableWebAudio: false,
         },
         seed: ["gramola"]
     };

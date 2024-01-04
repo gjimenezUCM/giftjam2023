@@ -106,9 +106,18 @@ export interface AssignmentConfig {
 }
 
 export interface AssignmentResult {
-    resultType: "PASS" | "FAIL"
+    assignmentId: string,
+    resultType: "PASS" | "FAIL",
+    numDays: number,
+    numDaysWhenCompleted: number
 }
 
 export interface LevelData {
-    nextAssignment: number
+    nextAssignment: number,
+    assignmentResults: Array<AssignmentResult>
+}
+
+export interface FinalData {
+    globalGrade: "PASS" | "FAIL",
+    assignmentResults: Array<AssignmentResult>
 }

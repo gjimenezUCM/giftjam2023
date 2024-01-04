@@ -122,9 +122,13 @@ export default class Assignment {
                 // Comprobamos si hemos llegado al deadline
                 if (this.currentDays==this.cfg.numDays) {
                     this.text.setText("Práctica no entregada");
-                    this.scene.onPlayerDead(); 
                     this.completed = true;
-                    this.completeAndShutdown({ resultType: "FAIL" });
+                    this.completeAndShutdown({
+                        resultType: "FAIL",
+                        assignmentId: this.cfg.assignmentId,
+                        numDays: this.cfg.numDays,
+                        numDaysWhenCompleted: this.currentDays
+                    });
     
                 } else {
                     this.activateComputer();
@@ -166,7 +170,12 @@ export default class Assignment {
             if (this.currentInteractions === this.cfg.numIteractions) {
                 Assignment.assignmentCompletedSound.play();
                 this.text.setText("¡Práctica completada!");
-                this.completeAndShutdown({resultType: "PASS"});
+                this.completeAndShutdown({
+                        resultType: "PASS",
+                        assignmentId: this.cfg.assignmentId,
+                        numDays: this.cfg.numDays,
+                        numDaysWhenCompleted:this.currentDays
+                });
             } else {
                 Assignment.interactionCompletedSound.play();
             }

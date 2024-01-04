@@ -22,6 +22,8 @@ export default class Level extends Phaser.Scene {
     private assignment: Assignment;
     private assignmentIndex: number;
 
+    private prevAssignmentResults: Array<AssignmentResult>;
+
     private activated: boolean;
 
     private sentence: Sentence;
@@ -41,6 +43,7 @@ export default class Level extends Phaser.Scene {
 
     init(data:LevelData) {
         this.assignmentIndex = data.nextAssignment || 0;
+        this.prevAssignmentResults = data.assignmentResults;
     }
 
     /**
@@ -121,7 +124,7 @@ export default class Level extends Phaser.Scene {
         this.sentence.setActive(false);
         this.time.addEvent({
             delay: 1000,
-            callback: () => { this.scene.start('menu'); },
+            callback: () => { this.player.onRestart(); },
             callbackScope: this,
             loop: false
         });
@@ -133,23 +136,39 @@ export default class Level extends Phaser.Scene {
     }
 
     onLevelCompleted(result: AssignmentResult) {
-        this.player.setActive(false);
         this.sentence.onLevelComplete();
         this.sentence.setActive(false);
+        if (result.resultType =="FAIL") {
+            this.player.onDead();
+        }
         this.time.addEvent({
             delay: 1500,
-            callback: () => { this.resolveNextLevel(); },
+            callback: () => { this.resolveNextLevel(result); },
             callbackScope: this,
             loop: false
         });
     }
 
-    resolveNextLevel() {
+    resolveNextLevel(result: AssignmentResult) {
         this.assignmentIndex++;
-        if (this.assignmentIndex === theAssignments.length) {
-            this.scene.start('menu');
+        this.prevAssignmentResults.push(result)
+
+        // Si hemos terminado porque:
+        // 1. No se ha pasado este nivel
+        // 2. Se han completado todos los niveles
+        if ( result.resultType==="FAIL" ||
+             this.assignmentIndex === theAssignments.length) {
+            // Mostramos la escena de final
+            this.scene.start('final', {
+                globalGrade: result.resultType,
+                assignmentResults: this.prevAssignmentResults
+            });
         } else {
-            this.scene.start('level', { nextAssignment: this.assignmentIndex });
+            // Hemos completado el nivel pero aún quedan más
+            this.scene.start('level', { 
+                nextAssignment: this.assignmentIndex,
+                assignmentResults: this.prevAssignmentResults
+            });
         }
     }
 

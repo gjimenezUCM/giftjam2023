@@ -1,3 +1,4 @@
+import { LevelData } from "./configTypes";
 
 /**
  * Menu
@@ -50,7 +51,7 @@ export default class Menu extends Phaser.Scene {
         title.setDepth(5000);
 
         let startTextPosX = 8*32;
-        let startTextPosY = 4*32;
+        let startTextPosY = 5*32;
         let startText = this.add.text(
             startTextPosX, startTextPosY,
             'Empezar',
@@ -69,7 +70,7 @@ export default class Menu extends Phaser.Scene {
 
 
 
-        startTextPosY = 5 * 32;
+        startTextPosY = 6 * 32;
         let creditsText = this.add.text(
             startTextPosX, startTextPosY,
             'Créditos',
@@ -93,13 +94,14 @@ export default class Menu extends Phaser.Scene {
             this.startKey = this.input.keyboard.addKey('E');
             this.creditsKey = this.input.keyboard.addKey('C');
         }
-
-        //this.sound.add("soundtrack", { loop: true });
     }
 
     update(time: number, dt: number) {
         if (Phaser.Input.Keyboard.JustDown(this.startKey)) {
-            this.scene.start('level', { nextAssignment: 0 });
+            this.scene.start('level', { 
+                nextAssignment: 0,
+                assignmentResults: []
+            } as LevelData);
         }
         if (Phaser.Input.Keyboard.JustDown(this.creditsKey)) {
             this.scene.start('credits' );
