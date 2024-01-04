@@ -3,6 +3,10 @@
     src: url('../fonts/Minecraftia.ttf') format('truetype');
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
     background-color: black;
+    font-family: "Press Start 2P";
+    color: whitesmoke;
 }
