@@ -13,7 +13,7 @@ theAssignments = [
         numIteractions: 3,
         numDays: 14,
         timePerDayMs: 2000,
-        maxActiveComputers: 3
+        maxActiveComputers: 4
     },   
     {
         assignmentId: "Práctica 2",
@@ -21,6 +21,13 @@ theAssignments = [
         numDays: 14,
         timePerDayMs: 2000,
         maxActiveComputers: 3
+    },
+    {
+        assignmentId: "Práctica 3",
+        numIteractions: 7,
+        numDays: 21,
+        timePerDayMs: 2000,
+        maxActiveComputers: 2
     }
 ]
 
