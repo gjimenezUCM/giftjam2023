@@ -28,7 +28,7 @@ export default class Boot extends Phaser.Scene {
      * Carga de los assets del juego
      */
     preload() {
-        this.loadFont("Minecraft", "/assets/fonts/Minecraftia.woff");
+        this.loadFont("Minecraft", "assets/fonts/Minecraftia.woff");
         this.load.tilemapTiledJSON('tilemap', 'assets/maps/lab.json');
         this.load.audio("dead", "assets/sounds/dead.wav");
         this.load.audio("interactionCompleted", "assets/sounds/interactionCompleted.wav");
