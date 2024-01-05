@@ -58,6 +58,7 @@ export default class Assignment {
 
     onActivate() {
         this.activated = true;
+        this.activateComputer(2);
     }
 
     createUI(x: number, y: number) {
@@ -131,22 +132,25 @@ export default class Assignment {
                     });
     
                 } else {
-                    this.activateComputer();
+                    this.activateComputer(2);
                 }
             }
         }
     }
 
-    activateComputer() {
+    activateComputer(numComputers: number = 1) {
         if (!this.completed) {
-            if (this.currentActiveComputers == this.cfg.maxActiveComputers)
-                return;
-            let aComputer:Computer;
-            do {
-                aComputer = <Computer>Phaser.Math.RND.pick(this.computers.getChildren());
-            } while (aComputer.computerState !== "OCCUPIED")
-            (<Computer>aComputer).doWakeUp(6, 10000);
-            this.currentActiveComputers++;
+            while(numComputers>0) {
+                if (this.currentActiveComputers == this.cfg.maxActiveComputers)
+                    return;
+                let aComputer:Computer;
+                do {
+                    aComputer = <Computer>Phaser.Math.RND.pick(this.computers.getChildren());
+                } while (aComputer.computerState !== "OCCUPIED")
+                (<Computer>aComputer).doWakeUp(6, 10000);
+                this.currentActiveComputers++;
+                numComputers--;
+            }
         }
     }
 

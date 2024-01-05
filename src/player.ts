@@ -17,7 +17,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
      */
     constructor(scene: Phaser.Scene) {
         let x = <number>scene.game.config.width / 2;
-        let y = <number>scene.game.config.height / 2 - 16;
+        let y = 2*32 + (<number>scene.game.config.height / 2) - 16;
         super( scene,
                x, 
                y,
@@ -50,20 +50,29 @@ export default class Player extends Phaser.GameObjects.Sprite {
         let dx = 0;
         let dy = 0;
         if (this.cursors.up.isDown) {
-            dy = -1;//this.body.setVelocityY(-this.speed);
-            this.play('up', true);
+            dy = -1;
         }
         if (this.cursors.down.isDown) {
-            dy = 1;//this.body.setVelocityY(this.speed);
-            this.play('down', true);
+            dy = 1;
         }
         if (this.cursors.left.isDown) {
-            dx = -1;//this.body.setVelocityX(-this.speed);
-            this.play('left', true);
+            dx = -1;
         }
         if (this.cursors.right.isDown) {
-            dx = 1;//this.body.setVelocityX(this.speed);
-            this.play('right', true);
+            dx = 1;
+        }
+        if (dy===0) {
+            if (dx===1) {
+                this.play('right', true);
+            } else if (dx===-1) {
+                this.play('left', true);  
+            } 
+        } else {
+            if (dy === -1) {
+                this.play('up', true);
+            } else {
+                this.play('down', true);
+            }
         }
         let vDir = new Phaser.Math.Vector2(dx, dy);
         vDir.normalize().scale(this.speed);
@@ -81,6 +90,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     onRestart() {
+        // Volvemos a poner las colisiones al jugador
         (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = false;
         this.setVisible(true);
         this.setActive(true);

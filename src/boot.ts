@@ -209,8 +209,16 @@ export default class Boot extends Phaser.Scene {
 
         // Para facilitar el comportamiento del shake de las letras
         Phaser.Math.RND.signs = [-1, 0, 1];
-        this.sound.add("soundtrack", { loop: true, delay: 200 }).play();
-        this.scene.start('menu');
+        if (this.game.config.physics.arcade?.debug) {
+            this.scene.start('level', {
+                nextAssignment: 0,
+                assignmentResults: []
+            });
+        } else {
+            this.sound.add("soundtrack", { loop: true, delay: 200 }).play();
+            this.scene.start('menu');
+        }
+
 
     }
 }

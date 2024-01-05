@@ -48,7 +48,7 @@ export default class Letter extends Phaser.GameObjects.Sprite {
         this.scene.physics.add.existing(this);
         this.setVisible(false);
         this.setActive(false);
-        this.setTint(0x000000);
+        this.setTint(0x2b2f4e); // Color pizarra
         this.setDepth(2000);
     }
 

@@ -85,16 +85,25 @@ export default class Sentence extends Phaser.GameObjects.Group {
         let result: Array<CustomLetterConfig> = [];
         let letterConf:CustomLetterConfig;
         for (letterConf of this.cfg.custom) {
-            let range = letterConf.range.split("-");
-            if (range.length==1) {
-                result[parseInt(range[0])] = letterConf;
-            } else {
+            if (letterConf.range.includes("-")) {
+                // hemos puesto un rango de letras "init-end"
+                let range = letterConf.range.split("-");
                 let init = parseInt(range[0]);
                 let end = parseInt(range[1]);
-                while (init<=end){
+                while (init <= end) {
                     result[init] = letterConf;
                     init++;
                 } 
+            } else if (letterConf.range.includes(",")) {
+                // Hemos puesto posiciones sueltas, separadas por comas
+                let range = letterConf.range.split(",");
+                for (let pos of range) {
+                    result[parseInt(pos) ] = letterConf;
+                }              
+
+            } else {
+                // Solo hay una posición
+                result[parseInt(letterConf.range)] = letterConf;
             }
         }
         return result;
