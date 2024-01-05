@@ -17,7 +17,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     private currentClicks= 0;
     private activationKey: Phaser.Input.Keyboard.Key;
 
-    private computerState: "WAITING" | "PLAYER_INSIDE" | "PLAYER_LEFT" | "SLEEP";
+    computerState: "WAITING" | "PLAYER_INSIDE" | "PLAYER_LEFT" | "OCCUPIED";
 
     private maxTimeWaiting = 10000;
     private maxTimeNoPlayer = 2000;
@@ -32,6 +32,10 @@ export default class Computer extends Phaser.GameObjects.Sprite {
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, 'computer');
         this.setDepth(400);
+        this.scene.physics.add.existing(this);
+        if (this.body) {
+            (<Phaser.Physics.Arcade.Body>this.body).setSize(10, 10)
+        }
         this.loadingBarFrame = new Phaser.GameObjects.Sprite(this.scene,this.x, this.y, 'loadingBarFrame');
         this.loadingBarContent = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, 'loadingBarContent')
         this.interactionKeySprite = new Phaser.GameObjects.Sprite(this.scene, this.x, this.y, "interactionKey");
@@ -42,7 +46,9 @@ export default class Computer extends Phaser.GameObjects.Sprite {
         if (this.scene.input.keyboard !== null) {
             this.activationKey = this.scene.input.keyboard.addKey('C');            
         }
-        this.setVisible(false);
+        let i = Phaser.Math.RND.integerInRange(0,9);
+        this.play(`computerOccupied-${i}-idle`);
+        //this.setVisible(false);
     }
 
     setAssignmentManager(aManager: Assignment) {
@@ -55,9 +61,7 @@ export default class Computer extends Phaser.GameObjects.Sprite {
      * @param maxTimeWaiting Máximo tiempo que el computador estará activo antes de que el jugador llegue a él
      */
     doWakeUp(numberOfClicks: number = 6, maxTimeWaiting: number = 5000){
-        if (this.body) {
-            (<Phaser.Physics.Arcade.Body>this.body).setSize(10, 10)
-        }
+        (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = false;
         this.play('computer-idle');
         this.loadingBarFrame.setPosition(this.x + this.width /2 + Computer.offset, this.y); 
         this.loadingBarContent.setPosition(this.x + this.width / 2 + Computer.offset, this.y);
@@ -74,19 +78,22 @@ export default class Computer extends Phaser.GameObjects.Sprite {
 
         this.waitingTimer = maxTimeWaiting;
         this.setActive(true);
-        this.setVisible(true);
+        //this.setVisible(true);
     }
 
     /**
      * Desactivación del computador
      */
     doShutdown(){
+        (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = true;
         this.loadingBarFrame.setVisible(false);
         this.loadingBarContent.setVisible(false);
         this.interactionKeySprite.setVisible(false);
-        this.computerState = "SLEEP";
-        this.setActive(false);
-        this.setVisible(false);
+        this.computerState = "OCCUPIED";
+        //this.setActive(false);
+        //this.setVisible(false);
+        let i = Phaser.Math.RND.integerInRange(0, 9);
+        this.play(`computerOccupied-${i}-idle`);
         this.manager.onComputerShutdown();
     }
     /**
@@ -95,6 +102,8 @@ export default class Computer extends Phaser.GameObjects.Sprite {
      */
     preUpdate(t: number, dt: number) {
         super.preUpdate(t, dt);
+        if (this.computerState === "OCCUPIED")
+            return;
         this.interactionKeySprite.update(t,dt);
 
         // Si estamos en el estado WAITING (el jugador no ha pasado aún por aquí),

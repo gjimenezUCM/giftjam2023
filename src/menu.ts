@@ -36,6 +36,7 @@ export default class Menu extends Phaser.Scene {
             map.createLayer('walls', [tileset1, tileset4, tileset5]);
             map.createLayer('floor',[tileset1, tileset4, tileset5]);
             deskLayer = map.createLayer('desks', tileset3);
+            map.createLayer('keyboards', [tileset3]);
             let screens = map.createLayer('screens', [tileset2, tileset3]);
             screens?.setDepth(1000);
         }

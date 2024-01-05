@@ -65,6 +65,11 @@ export default class Boot extends Phaser.Scene {
         this.load.image('floors-ts', 'room/floors.png');
         this.load.image('baseboards-ts', 'room/baseboards.png');
 
+        for (let i=0; i<10; i++) {
+            this.load.spritesheet(`computerOccupied-${i}`,
+                `computerOccupied-${i}.png`,
+                { frameWidth: 32, frameHeight: 80 });
+        }
         this.load.spritesheet('tutorial1',
             'tutorial/tutorial1.png',
             { frameWidth: 320, frameHeight: 240, startFrame: 0, endFrame: 19 });
@@ -143,6 +148,17 @@ export default class Boot extends Phaser.Scene {
             repeat: -1,
             yoyo: true
         });
+
+        for (let i = 0; i < 10; i++) {
+            this.anims.create({
+                key: `computerOccupied-${i}-idle`,
+                frames: this.anims.generateFrameNumbers(`computerOccupied-${i}`, { start: 0, end: 5 }),
+                frameRate: 12, // Velocidad de la animación
+                repeat: -1
+            });
+        }
+
+
         // Animación de la tecla de interación
         this.anims.create({
             key: 'interactionKey-idle',

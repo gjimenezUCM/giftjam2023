@@ -141,10 +141,10 @@ export default class Assignment {
         if (!this.completed) {
             if (this.currentActiveComputers == this.cfg.maxActiveComputers)
                 return;
-            let aComputer = null;
+            let aComputer:Computer;
             do {
-                aComputer = Phaser.Math.RND.pick(this.computers.getChildren());
-            } while(aComputer.active)
+                aComputer = <Computer>Phaser.Math.RND.pick(this.computers.getChildren());
+            } while (aComputer.computerState !== "OCCUPIED")
             (<Computer>aComputer).doWakeUp(6, 10000);
             this.currentActiveComputers++;
         }
