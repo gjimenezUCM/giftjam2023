@@ -1,12 +1,12 @@
 @font-face {
     font-family: 'Minecraftia';
-    src: url('../fonts/Minecraftia.ttf') format('truetype');
+    src: url('../fonts/Minecraftia.woff') format('woff');
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 body {
-    background-color: black;
+    background-color: #2b2f4e;
     font-family: "Press Start 2P";
     color: whitesmoke;
 }
