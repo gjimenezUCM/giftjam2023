@@ -94,6 +94,12 @@ export default class Level extends Phaser.Scene {
             <Array<Computer>>computerSet,
             theAssignments[this.assignmentIndex]
         );
+
+        let guille = this.add.sprite(0, 0, "guille");
+        guille.play("guille-idle");
+        guille.setScale(2.5);
+        guille.setPosition(14 * 32 - 16, 6 * 32);
+
         this.time.addEvent({
             delay: 1000,
             callback: this.onStart,

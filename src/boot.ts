@@ -58,6 +58,10 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('loadingBarContent',
             'loadingBar.png',
             { frameWidth: 16, frameHeight: 32, startFrame: 3, endFrame: 9 });
+
+        this.load.spritesheet('guille',
+            'guille-spritesheet.png',
+            { frameWidth: 24, frameHeight: 24 });
         this.load.image('menuBg', 'menu.png');
         this.load.image('wallfloor-ts', 'room/wall-floor.png');
         this.load.image('screens-ts', 'room/screens.png');
@@ -198,7 +202,19 @@ export default class Boot extends Phaser.Scene {
             frameRate: 16,
             repeat: -1
         });
+        this.anims.create({
+            key: 'guille-idle',
+            frames: this.anims.generateFrameNumbers('guille', { start: 0, end: 2 }),
+            frameRate: 7,
+            repeat: -1
+        });
 
+        this.anims.create({
+            key: 'guille-run',
+            frames: this.anims.generateFrameNumbers('guille', { start: 3, end: 8 }),
+            frameRate: 16,
+            repeat: -1
+        });
 
         // this.anims.create({
         //     key: 'tutorial1-idle',
