@@ -1,6 +1,6 @@
 # ¿Quién tiene el kit?
 
-Videojuego creado para la GiftJam23  y dedicado a los que "sufren" la asignatura de Videojuegos en Consolas del Grado en Desarrollo de Videojuegos de la Universidad Complutense de Madrid. ¡Sólo ellos podrán entender este videojuego!
+Videojuego creado para la [GiftJam23](https://itch.io/jam/gift-jam-2023)  y dedicado a los que "sufren" la asignatura de Videojuegos en Consolas del Grado en Desarrollo de Videojuegos de la Universidad Complutense de Madrid. ¡Sólo ellos podrán entender este videojuego!
 
 Desarrollado en [Phaser](https://phaser.io/) usando Typescript y Webpack. Mapas creados con [Tiled](https://www.mapeditor.org/)
 
@@ -22,6 +22,7 @@ Han colaborado y se han usado los recursos de toda esta gente:
     - [LimeZu](https://limezu.itch.io/)
     - [BDragon1727](https://bdragon1727.itch.io/)
     - [vryell](https://vryell.itch.io/)
+    - [Andrés Carnicero](https://www.linkedin.com/in/andr%C3%A9s-carnicero-esteban-25a203232/)
 - Sonido:
     - [Juhani Junkala](https://juhanijunkala.com/)
     - [BloodPixelHero](https://freesound.org/people/BloodPixelHero/)
