@@ -1,4 +1,5 @@
 import { LevelData } from "./configTypes";
+import theTelemetry from './telemetry';
 
 /**
  * Menu
@@ -98,6 +99,7 @@ export default class Menu extends Phaser.Scene {
 
     update(time: number, dt: number) {
         if (Phaser.Input.Keyboard.JustDown(this.startKey)) {
+            theTelemetry.trackEvent("GAME:START");
             this.scene.start('level', { 
                 nextAssignment: 0,
                 assignmentResults: []

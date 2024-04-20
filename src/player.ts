@@ -1,4 +1,5 @@
 import Explosion from "./explosion";
+import theTelemetry from './telemetry';
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -82,6 +83,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     onDead() {
+        theTelemetry.trackEvent("PLAYER:DEATH", { x: this.x, y: this.y });
         // Eliminamos las colisiones con el jugador
         (<Phaser.Physics.Arcade.Body>this.body).checkCollision.none = true;
         new Explosion(this.scene, this.x, this.y);

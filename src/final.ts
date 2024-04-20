@@ -1,4 +1,5 @@
 import { AssignmentResult, FinalData } from "./configTypes";
+import theTelemetry from './telemetry';
 /**
  * Menu
  * @extends Phaser.Scene
@@ -123,6 +124,8 @@ export default class Final extends Phaser.Scene {
 
     update(time: number, dt: number) {
         if (Phaser.Input.Keyboard.JustDown(this.returnKey)) {
+            theTelemetry.trackEvent("GAME:END", { result: this.finalResults.globalGrade });
+            theTelemetry.flush();
             this.scene.start('menu');
         }
     }

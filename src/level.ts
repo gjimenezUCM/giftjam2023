@@ -6,7 +6,7 @@ import Assignment from "./assignment";
 import { AssignmentResult, LevelData } from "./configTypes"
 import {patterns} from './sentencePatterns';
 import { theAssignments } from './assignmentData';
-
+import theTelemetry from './telemetry';
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
  * sobre las que se sitúan las bases en las podrán aparecer las estrellas. 
@@ -106,6 +106,7 @@ export default class Level extends Phaser.Scene {
             callbackScope: this,
             loop: false
         });
+        theTelemetry.trackEvent("LEVEL:START", { levelId: this.assignmentIndex+1 });
     }
 
     onStart() {
@@ -147,7 +148,7 @@ export default class Level extends Phaser.Scene {
         this.sentence.onLevelComplete();
         this.sentence.setActive(false);
         if (result.resultType =="FAIL") {
-            this.player.onDead();
+            this.player.onDead();            
         }
         this.time.addEvent({
             delay: 1500,
@@ -166,12 +167,19 @@ export default class Level extends Phaser.Scene {
         // 2. Se han completado todos los niveles
         if ( result.resultType==="FAIL" ||
              this.assignmentIndex === theAssignments.length) {
+            if (result.resultType === "FAIL"){
+                theTelemetry.trackEvent("LEVEL:END", { levelId: this.assignmentIndex, result: "FAIL" });
+            } else {
+                // Se ha terminado porque hemos completado todas las prácticas
+                theTelemetry.trackEvent("LEVEL:END", { levelId: this.assignmentIndex, result: "PASS" });
+            }
             // Mostramos la escena de final
             this.scene.start('final', {
                 globalGrade: result.resultType,
                 assignmentResults: this.prevAssignmentResults
             });
         } else {
+            theTelemetry.trackEvent("LEVEL:END", { levelId: this.assignmentIndex, result: "PASS" });
             // Hemos completado el nivel pero aún quedan más
             this.scene.start('level', { 
                 nextAssignment: this.assignmentIndex,
